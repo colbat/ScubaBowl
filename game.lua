@@ -8,16 +8,45 @@ physics.start()
 
 print("Level: "..level)
 
-local ball = display.newCircle(localGroup, 0,0, 30 )
-ball.x = originx + 200
-ball.y = originy + pixelheight - 200
-ball.startX = ball.x
-ball.startY = ball.y
-ball:setFillColor(255)
-ball.myName = "ball"
-ball.released = false
+local touchBall
+local gameOver
+local touchScreen
+local ball = {}
+local numOfBalls = 2
+local currentBall
+for i = 1, numOfBalls do
+ball[i] = display.newCircle(localGroup, 0,0, 30 )
+ball[i].x = originx + 25 + 25*i
+ball[i].y = originy + pixelheight - 50
+ball[i]:setFillColor(255)
+ball[i].myName = "ball"
+ball[i].released = false
+ball[i].stopped = false
+ball[i].ready = false
+end
 
-physics.addBody(ball, "kinematic", {radius = 30, friction = 10, bounce = 0.1})
+
+--physics.addBody(ball, "kinematic", {radius = 30, friction = 10, bounce = 0.1})
+
+local function initNewBall()
+	for i = numOfBalls, 1, -1 do
+		print(i..". ball[i].released "..tostring(ball[i].released))
+		if ball[i].released == false then
+			currentBall = i
+		end
+	end
+	print("currentBall: "..currentBall)
+	physics.addBody(ball[currentBall], "kinematic", {radius = 30, friction = 10, bounce = 0.1})
+	ball[currentBall].startX = originx + 200
+	ball[currentBall].startY = originy + pixelheight - 200
+	local function makeBallReady()
+		touchScreen:addEventListener("touch", touchBall)
+		ball[currentBall].ready = true
+	end
+	transitionStash.initBallTrans = transition.to(ball[currentBall], {time = 1000, x = ball[currentBall].startX, y = ball[currentBall].startY, onComplete = makeBallReady})
+	
+end
+initNewBall()		
 
 local floor = display.newRect(localGroup, 0, 0, pixelwidth, 10 )
 floor.x = middlex
@@ -37,7 +66,7 @@ leftWall.y = middley
 leftWall:setFillColor(255)
 physics.addBody(leftWall, "static", {bounce = 0.05, friction = 1})
 ]]
-local touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
+touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
 
@@ -46,56 +75,60 @@ touchScreen.isHitTestable = true
 local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
 directionArrow:setFillColor(0,0,0,0)
 directionArrow.maxForce = 200
-localGroup:insert(ball)
-local function touchBall(event)
+for i = 1, numOfBalls do
+	localGroup:insert(ball[i])
+end
+function touchBall(event)
+	if ball[currentBall].ready == true then
 	if event.phase == "began" then
 		directionArrow:setFillColor(0,255,0,255)
-		directionArrow.x = ball.startX
-		directionArrow.y = ball.startY
+		directionArrow.x = ball[currentBall].startX
+		directionArrow.y = ball[currentBall].startY
 		directionArrow.alpha = 0
 		
 	elseif event.phase == "moved" then
-		ball.x = event.x
-		ball.y = event.y
-		local xDist = ball.startX-ball.x; local yDist = ball.startY-ball.y
+		ball[currentBall].x = event.x
+		ball[currentBall].y = event.y
+		local xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 		local lineAngle = math.deg( math.atan( yDist/xDist ) )
 		if math.sqrt(xDist^2+yDist^2) < directionArrow.maxForce then
 			directionArrow.width = math.sqrt(xDist^2+yDist^2)
 			directionArrow.rotation = lineAngle
-			directionArrow.x = ball.startX - (ball.startX-ball.x)/2
-			directionArrow.y = ball.startY - (ball.startY-ball.y)/2
+			directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
+			directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		else
 			local excessDist = directionArrow.maxForce/(math.sqrt(xDist^2+yDist^2))
 			--print(excessDist)
-			ball.x = ball.startX - (ball.startX-event.x) * excessDist
-			ball.y = ball.startY - (ball.startY-event.y) * excessDist
-			xDist = ball.startX-ball.x; local yDist = ball.startY-ball.y
+			ball[currentBall].x = ball[currentBall].startX - (ball[currentBall].startX-event.x) * excessDist
+			ball[currentBall].y = ball[currentBall].startY - (ball[currentBall].startY-event.y) * excessDist
+			xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 			lineAngle = math.deg( math.atan( yDist/xDist ) )
 			directionArrow.width = math.sqrt(xDist^2+yDist^2)
 			directionArrow.rotation = lineAngle
-			directionArrow.x = ball.startX - (ball.startX-ball.x)/2
-			directionArrow.y = ball.startY - (ball.startY-ball.y)/2
+			directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
+			directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		end
 			
 		--print(directionArrow.width)
+		directionArrow:setFillColor(0,255,0)
 		directionArrow.alpha = 0.6
 		--directionArrow:setFillColor(255*(directionArrow.width/directionArrow.maxForce),255*(1-directionArrow.width/directionArrow.maxForce),0)
-		ball.prevX = ball.x
-		ball.prevY = ball.y
+		ball[currentBall].prevX = ball[currentBall].x
+		ball[currentBall].prevY = ball[currentBall].y
 	elseif event.phase == "ended" or event.phase == "cancelled" then
-		ball.bodyType = "dynamic"
-		ball:applyLinearImpulse( (ball.startX-ball.x)/200, (ball.startY-ball.y)/200, ball.x, ball.y )
-		display.remove(directionArrow)
+		ball[currentBall].bodyType = "dynamic"
+		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)/200, (ball[currentBall].startY-ball[currentBall].y)/200, ball[currentBall].x, ball[currentBall].y )
+		directionArrow.alpha = 0
 		touchScreen:removeEventListener("touch", touchBall)
-		--print("Velocity: "..ball:getLinearVelocity() / 30 .." m/s")
-		local vx, vy = ball:getLinearVelocity()
+		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
+		local vx, vy = ball[currentBall]:getLinearVelocity()
 		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
-		ball.released = true
+		ball[currentBall].released = true
+	end
 	end
 end
 
-touchScreen:addEventListener("touch", touchBall)
 
 
 local pin1 = display.newRect(localGroup, 0, 0, 20, 50)
@@ -126,18 +159,13 @@ local function onLocalCollision( self, event )
         end
 end
  
-ball.collision = onLocalCollision
-ball:addEventListener( "collision", ball )
-pin1.collision = onLocalCollision
-pin1:addEventListener( "collision", pin1 )
-pin2.collision = onLocalCollision
-pin2:addEventListener( "collision", pin2 )
-pin3.collision = onLocalCollision
-pin3:addEventListener( "collision", pin3 )
+ball[currentBall].collision = onLocalCollision
+ball[currentBall]:addEventListener( "collision", ball[currentBall] )
+
 
 local function onLocalPreCollision( self, event )
-	if event.other.myName and event.other.myName == "ball" then
-		print(self.myName.." with ball Force: "..event.force)
+	if event.other.myName and event.other.myName == "ball[currentBall]" then
+		print(self.myName.." with ball[currentBall] Force: "..event.force)
 	end
 end
 
@@ -148,26 +176,39 @@ pin2:addEventListener( "postCollision", pin2 )
 pin3.postCollision = onLocalPreCollision
 pin3:addEventListener( "postCollision", pin3 )
 
-print("hi")
-
+local try = 0
 local function checkBall(event)
-	if ball then
-	local vx, vy = ball:getLinearVelocity()
-	if (ball.released == true and (vx < 5 and vy < 5) ) or (ball.x > originx+pixelwidth or ball.x < originx) then
+	if ball[currentBall] then
+	local vx, vy = ball[currentBall]:getLinearVelocity()
+	if ball[currentBall].stopped == false and ball[currentBall].released == true and ((math.abs(vx) < 5 and math.abs(vy) < 5)  or ball[currentBall].x > originx+pixelwidth or ball[currentBall].x < originx) then
+
+		if try == 30 then
 		print("Remove Ball")
+		ball[currentBall].stopped = true
+		local oldBall = currentBall
 		local function removeBallDelay()
-			display.remove(ball)
-			ball = nil
+			display.remove(ball[oldBall])
+			ball[oldBall] = nil
 		end
 		timerStash.removeBallTimer = timer.performWithDelay( 1000, removeBallDelay )
-		
+		if currentBall == numOfBalls then
+			gameOver()
+		else
+			initNewBall()
+		end
+		try = 0
+		else try = try+1
+		end
+	else try = 0
 	end
 end
 end
 Runtime:addEventListener("enterFrame", checkBall)
 
 
-
+function gameOver()
+	print("GAME OVER")
+end
 
 
 return localGroup
