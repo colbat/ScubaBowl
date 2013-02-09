@@ -6,7 +6,7 @@ local localGroup = display.newGroup()
 refreshData()
 physics.start()
 
-
+print("Level: "..level)
 
 local ball = display.newCircle(localGroup, 0,0, 30 )
 ball.x = originx + 200
@@ -15,14 +15,15 @@ ball.startX = ball.x
 ball.startY = ball.y
 ball:setFillColor(255)
 ball.myName = "ball"
+ball.released = false
 
-physics.addBody(ball, "kinematic")
+physics.addBody(ball, "kinematic", {radius = 30, friction = 10, bounce = 0.1})
 
 local floor = display.newRect(localGroup, 0, 0, pixelwidth, 10 )
 floor.x = middlex
 floor.y = originy + pixelheight - 5
 floor:setFillColor(255)
-physics.addBody(floor, "static", {bounce = 0.05, friction = 1})
+physics.addBody(floor, "static", {bounce = 0.5, friction = 100})
 
 --[[local rightWall = display.newRect(localGroup, 0, 0, 10, pixelheight )
 rightWall.x = originx + pixelwidth - 5
@@ -87,9 +88,10 @@ local function touchBall(event)
 		display.remove(directionArrow)
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball:getLinearVelocity() / 30 .." m/s")
-		vx, vy = ball:getLinearVelocity()
+		local vx, vy = ball:getLinearVelocity()
 		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
+		ball.released = true
 	end
 end
 
@@ -110,7 +112,7 @@ local pin3 = display.newRect(localGroup, 0, 0, 20, 50)
 pin3.x = 568
 pin3.y = 600
 physics.addBody(pin3, "dynamic")
-pin2.myName = "pin2"
+pin3.myName = "pin3"
 
 local function onLocalCollision( self, event )
         if ( event.phase == "began" ) then
@@ -134,7 +136,7 @@ pin3.collision = onLocalCollision
 pin3:addEventListener( "collision", pin3 )
 
 local function onLocalPreCollision( self, event )
-	if event.other.myName == "ball" then
+	if event.other.myName and event.other.myName == "ball" then
 		print(self.myName.." with ball Force: "..event.force)
 	end
 end
@@ -146,13 +148,23 @@ pin2:addEventListener( "postCollision", pin2 )
 pin3.postCollision = onLocalPreCollision
 pin3:addEventListener( "postCollision", pin3 )
 
+print("hi")
 
-
-local function CheckBall()
-	if nil then
+local function checkBall(event)
+	if ball then
+	local vx, vy = ball:getLinearVelocity()
+	if (ball.released == true and (vx < 5 and vy < 5) ) or (ball.x > originx+pixelwidth or ball.x < originx) then
+		print("Remove Ball")
+		local function removeBallDelay()
+			display.remove(ball)
+			ball = nil
+		end
+		timerStash.removeBallTimer = timer.performWithDelay( 1000, removeBallDelay )
+		
 	end
 end
---Runtime:addEventListener("enterframe", checkBall)
+end
+Runtime:addEventListener("enterFrame", checkBall)
 
 
 
