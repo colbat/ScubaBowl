@@ -31,6 +31,9 @@ loadFile = ego.loadFile
 --gameNetwork = require "gameNetwork"
 crypto = require "crypto"
 
+
+
+
 local function monitorMem()          
         local memUsed = collectgarbage("count") / 1000
         local texUsed = system.getInfo( "textureMemoryUsed" ) / 1000000
@@ -172,6 +175,44 @@ local mainGroup = display.newGroup()
 local itunesID = ""	--> set this if you want users to be able to rate your app
 local googlePlayID = ""
 
+
+local selectLevel = function()
+	menuGroup:removeSelf()
+	director:changeScene ("levelSelection")
+end
+
+
+local function loadMainMenu()
+
+	menuGroup = display.newGroup()
+
+	local spaceBetweenButton = 10
+	
+	-- Start Game Button
+	local newGameButton = display.newImage("graphics/startGameButton.png")
+	newGameButton.x = 0
+	newGameButton.y = 0
+	newGameButton.id = newGame
+	menuGroup:insert(newGameButton)
+
+	-- Options Button
+	local optionsButton = display.newImage("graphics/optionsButton.png")
+	optionsButton.x = 0
+	optionsButton.y = newGameButton.contentHeight + spaceBetweenButton
+	optionsButton.id = options
+	menuGroup:insert(optionsButton)
+
+    -- Main Menu group settings
+	menuGroup.y = 250
+	menuGroup.x = display.contentCenterX
+
+	print("Group content center X " .. display.contentCenterX)
+	print("Button X " .. newGameButton.x)
+
+	newGameButton:addEventListener("touch", selectLevel)
+
+end
+
 local function main()
 	mainGroup:insert(director.directorView)
 	if testVersion == true then
@@ -198,13 +239,12 @@ local function main()
 	else
 		function updateMem() end
 	end
-	
-	local startGame = function()
-		director:changeScene ("loading")
-	end
-	startGame()
+
+	loadMainMenu()
 	
 	return true
 end
+
+
 
 main()
