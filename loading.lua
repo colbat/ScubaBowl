@@ -35,10 +35,10 @@ io.output():setvbuf('no') 		-- **debug: disable output buffering for Xcode Conso
 
 
 
-local startGame = function()
-	director:changeScene ("game", "crossfade")
+local loadMainMenu = function()
+	director:changeScene ("mainMenu", "crossfade")
 end
-timerStash.startGame = timer.performWithDelay(100, startGame)
+timerStash.loadMainMenu = timer.performWithDelay(100, loadMainMenu)
 
 return localGroup
 end
