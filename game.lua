@@ -14,6 +14,7 @@ ball.y = originy + pixelheight - 200
 ball.startX = ball.x
 ball.startY = ball.y
 ball:setFillColor(255)
+ball.myName = "ball"
 
 physics.addBody(ball, "kinematic")
 
@@ -23,7 +24,7 @@ floor.y = originy + pixelheight - 5
 floor:setFillColor(255)
 physics.addBody(floor, "static", {bounce = 0.05, friction = 1})
 
-local rightWall = display.newRect(localGroup, 0, 0, 10, pixelheight )
+--[[local rightWall = display.newRect(localGroup, 0, 0, 10, pixelheight )
 rightWall.x = originx + pixelwidth - 5
 rightWall.y = middley
 rightWall:setFillColor(255)
@@ -34,7 +35,7 @@ leftWall.x = originx + 5
 leftWall.y = middley
 leftWall:setFillColor(255)
 physics.addBody(leftWall, "static", {bounce = 0.05, friction = 1})
-
+]]
 local touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
@@ -80,15 +81,80 @@ local function touchBall(event)
 		--directionArrow:setFillColor(255*(directionArrow.width/directionArrow.maxForce),255*(1-directionArrow.width/directionArrow.maxForce),0)
 		ball.prevX = ball.x
 		ball.prevY = ball.y
-	elseif event.phase == "ended" then
+	elseif event.phase == "ended" or event.phase == "cancelled" then
 		ball.bodyType = "dynamic"
 		ball:applyLinearImpulse( (ball.startX-ball.x)/200, (ball.startY-ball.y)/200, ball.x, ball.y )
 		display.remove(directionArrow)
 		touchScreen:removeEventListener("touch", touchBall)
+		--print("Velocity: "..ball:getLinearVelocity() / 30 .." m/s")
+		vx, vy = ball:getLinearVelocity()
+		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
+		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
 	end
 end
 
 touchScreen:addEventListener("touch", touchBall)
+
+
+local pin1 = display.newRect(localGroup, 0, 0, 20, 50)
+pin1.x = 502
+pin1.y = 600
+physics.addBody(pin1, "dynamic")
+pin1.myName = "pin1"
+local pin2 = display.newRect(localGroup, 0, 0, 20, 50)
+pin2.x = 967
+pin2.y = 600
+physics.addBody(pin2, "dynamic")
+pin2.myName = "pin2"
+local pin3 = display.newRect(localGroup, 0, 0, 20, 50)
+pin3.x = 568
+pin3.y = 600
+physics.addBody(pin3, "dynamic")
+pin2.myName = "pin2"
+
+local function onLocalCollision( self, event )
+        if ( event.phase == "began" ) then
+ 
+                --print( self.myName .. ": collision began with " .. event.other.myName )
+ 
+        elseif ( event.phase == "ended" ) then
+ 
+                --print( self.myName .. ": collision ended with " .. event.other.myName )
+ 
+        end
+end
+ 
+ball.collision = onLocalCollision
+ball:addEventListener( "collision", ball )
+pin1.collision = onLocalCollision
+pin1:addEventListener( "collision", pin1 )
+pin2.collision = onLocalCollision
+pin2:addEventListener( "collision", pin2 )
+pin3.collision = onLocalCollision
+pin3:addEventListener( "collision", pin3 )
+
+local function onLocalPreCollision( self, event )
+	if event.other.myName == "ball" then
+		print(self.myName.." with ball Force: "..event.force)
+	end
+end
+
+pin1.postCollision = onLocalPreCollision
+pin1:addEventListener( "postCollision", pin1 )
+pin2.postCollision = onLocalPreCollision
+pin2:addEventListener( "postCollision", pin2 )
+pin3.postCollision = onLocalPreCollision
+pin3:addEventListener( "postCollision", pin3 )
+
+
+
+local function CheckBall()
+	if nil then
+	end
+end
+--Runtime:addEventListener("enterframe", checkBall)
+
+
 
 
 
