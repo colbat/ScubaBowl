@@ -134,18 +134,25 @@ pin3.collision = onLocalCollision
 pin3:addEventListener( "collision", pin3 )
 
 local function onLocalPreCollision( self, event )
-	--print("hmm?")
-	---self.bodyType = "dynamic"
-	--print(self.myName)
-	--print(self.bodyType)
+	if event.other.myName == "ball" then
+		print(self.myName.." with ball Force: "..event.force)
+	end
 end
 
-pin1.preCollision = onLocalPreCollision
-pin1:addEventListener( "preCollision", pin1 )
-pin2.preCollision = onLocalPreCollision
-pin2:addEventListener( "preCollision", pin2 )
-pin3.preCollision = onLocalPreCollision
-pin3:addEventListener( "preCollision", pin3 )
+pin1.postCollision = onLocalPreCollision
+pin1:addEventListener( "postCollision", pin1 )
+pin2.postCollision = onLocalPreCollision
+pin2:addEventListener( "postCollision", pin2 )
+pin3.postCollision = onLocalPreCollision
+pin3:addEventListener( "postCollision", pin3 )
+
+
+
+local function CheckBall()
+	if nil then
+	end
+end
+--Runtime:addEventListener("enterframe", checkBall)
 
 
 
