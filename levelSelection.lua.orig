@@ -4,9 +4,17 @@ function new()
 updateMem()
 local localGroup = display.newGroup()
 
+<<<<<<< HEAD
+local startGame = function(self)
+	_G.level = self.level
+	director:changeScene ("game")
+=======
+local level1Button
+
 local startGame = function(event)
 	_G.level = event.target.level
-	director:changeScene ("game")
+	director:changeScene ("loading")
+>>>>>>> 8f1dc0a8d3028dcee30cf7d77c64bf45b28283c2
 end
 
 local myText = display.newText("Select your level!", 100, 0, native.systemFont, 40)
@@ -17,16 +25,12 @@ level1Button = display.newImage("graphics/level1Button.png")
 level1Button.x = 150
 level1Button.y = display.contentCenterY
 level1Button.level = 1
+<<<<<<< HEAD
+localGroup:insert(level1Button)
+=======
 level1Button:addEventListener("touch", startGame)
 
-level2Button = display.newImage("graphics/level2Button.png")
-level2Button.x = 350
-level2Button.y = display.contentCenterY
-level2Button.level = 2
-level2Button:addEventListener("touch", startGame)
-
-localGroup:insert(level1Button)
-localGroup:insert(level2Button)
+>>>>>>> 8f1dc0a8d3028dcee30cf7d77c64bf45b28283c2
 
 return localGroup
 end
