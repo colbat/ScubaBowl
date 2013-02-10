@@ -269,6 +269,17 @@ pin3.isDown = false
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
 pin3.myName = "pin3"
 
+local myAreaTipsWidth = pixelwidth / 2
+local myAreaTipsHeight = pixelheight / 2
+local bulleImg
+local myTips
+local animation
+local myAreaTips = display.newRect(originx, 0, myAreaTipsWidth, myAreaTipsHeight)
+myAreaTips.alpha = false
+--myAreaTips.strokeWidth = 3
+--myAreaTips:setFillColor( pink )
+--myAreaTips:setStrokeColor(180, 180, 180)
+
 local function checkForCollsion()
 	if pin1.isDown == false then
 		if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
@@ -325,8 +336,44 @@ local function checkBall(event)
 	end
 end
 end
-Runtime:addEventListener("enterFrame", checkBall)
 
+local function displayPopUpTips(event)
+	physics.pause()
+	--list = widget.newTableView( listOptions )
+	--tips = display.newText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et erat a quam vehicula tincidunt. Sed at tellus et sem condimentum tempor. Vestibulum placerat vulputate luctus.",bulleImg.x - 30, bulleImg.y, native.systemFont, 12)
+end
+
+local function deleteBubbleTips()
+	display.remove(myTips)
+	display.remove(bulleImg)
+	myTips = nil
+	bulleImg = nil
+end
+
+local function displayBubbleTips(event)
+	if ball[currentBall] then
+		if myTips == nil and ball[currentBall].y < myAreaTipsHeight and ball[currentBall].x < myAreaTipsWidth then
+			bulleImg = display.newImage( "graphics/bullesbleue.png" )
+			bulleImg.alpha = 0.2
+			bulleImg.x = originx + 200
+			bulleImg.y = originy + 200
+			
+			myTips = display.newText("Tips",bulleImg.x - 30, bulleImg.y, native.systemFont, 12)
+			myTips:setTextColor( gray )
+			myTips.size = 24
+			animation = display.newGroup()
+			animation.x, animation.y = 100, 100
+			animation:insert( bulleImg )
+			animation:insert( myTips )
+			animation:addEventListener("touch", displayPopUpTips)
+			localGroup:insert(animation)
+			transitionStash.trans = transition.to( animation, { time=4000, delay=2500, alpha=0,x=(animation.x+50), y=(animation.x-200), onComplete=deleteBubbleTips } )
+		end
+	end
+end
+
+Runtime:addEventListener("enterFrame", checkBall)
+Runtime:addEventListener( "enterFrame", displayBubbleTips )
 
 function gameOver()
 	--physics.stop()
