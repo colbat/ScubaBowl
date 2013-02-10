@@ -348,6 +348,8 @@ function gameOver()
 	print("GAME OVER")
 end
 
+local function moveBackgrounds()
+end
 
 return localGroup
 end
