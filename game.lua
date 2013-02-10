@@ -168,8 +168,8 @@ initNewBall()
 
 local floor = display.newRect(localGroup, 0, 0, pixelwidth, 10 )
 floor.x = middlex
-floor.y = originy + pixelheight - 5
-floor:setFillColor(255)
+floor.y = originy + pixelheight - 20
+floor:setFillColor(255,0)
 physics.addBody(floor, "static", {bounce = 0.5, friction = 100})
 
 --[[local rightWall = display.newRect(localGroup, 0, 0, 10, pixelheight )
@@ -187,6 +187,15 @@ physics.addBody(leftWall, "static", {bounce = 0.05, friction = 1})
 touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
+
+local charSequenceData = {
+    name = "char",
+	start = 1,
+	count = 2,
+}
+
+local charImgSheet = graphics.newImageSheet("graphics/Char_Character.png", sheets.getSpriteSheetDataChar())
+local char = display.newSprite(locaGroup, charImgSheet, charSequenceData )
 
 
 
@@ -262,8 +271,8 @@ pin2.isDown = false
 --physics.addBody(pin2, "dynamic", physicsData:get("seahorse"))
 pin2.myName = "pin2"
 local pin3 = display.newImage( gameObjectsSheet, 3, true)
-pin3.x = 568
-pin3.y = 200
+pin3.x = 668
+pin3.y = 450
 pin3.isDown = false
 --pin3:setFillColor(0,255,0)
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
