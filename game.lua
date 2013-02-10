@@ -1,9 +1,9 @@
 module(..., package.seeall)
 
-
-backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )  -- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
-
-
+if options["music"] == 1 then
+	 -- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
+	backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )
+end
 
 function new()
 updateMem()
@@ -455,7 +455,7 @@ local try = 0
 local bubbleFrame = 0
 local followingBubbles = {}
 transitionStash.followingBubbles = {}
-local function checkBall(event)
+function checkBall(event)
 	if ball[currentBall] then
 	local vx, vy = ball[currentBall]:getLinearVelocity()
 	if ball[currentBall].stopped == false and ball[currentBall].released == true and ((math.abs(vx) < 5 and math.abs(vy) < 5)  or ball[currentBall].x > originx+pixelwidth or ball[currentBall].x < originx) then
