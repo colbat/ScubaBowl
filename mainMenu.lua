@@ -14,6 +14,11 @@ local displayOptions = function()
 	director:changeScene("option", "fade")
 end
 
+local displayInstructions = function()
+	menuGroup:removeSelf()
+	director:changeScene("instructions", "fade")
+end
+
 local background = display.newImage(localGroup, "graphics/background.jpg", true)
 background.x = middlex
 background.y = middley
@@ -44,6 +49,13 @@ optionsButton.y = newGameButton.contentHeight + spaceBetweenButton
 optionsButton.id = options
 menuGroup:insert(optionsButton)
 
+-- Instructions Button
+local instructionsButton = display.newImage("graphics/instructionsButton.png")
+instructionsButton.x = 0
+instructionsButton.y = 170
+instructionsButton.id = options
+menuGroup:insert(instructionsButton)
+
 -- Main Menu group settings
 menuGroup.y = 250
 menuGroup.x = display.contentCenterX
@@ -52,6 +64,7 @@ localGroup:insert(menuGroup)
 
 newGameButton:addEventListener("touch", selectLevel)
 optionsButton:addEventListener("touch", displayOptions)
+instructionsButton:addEventListener("touch", displayInstructions)
 
 return localGroup
 end
