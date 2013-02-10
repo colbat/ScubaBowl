@@ -8,18 +8,30 @@ physics.start()
 
 print("Level: "..level)
 
+
+local physicsData = (require "Physics").physicsData(1)
+
 local background = display.newImage(localGroup, "graphics/background.jpg", true)
 background.x = middlex
 background.y = middley
+local layer2 = display.newImage(localGroup, "graphics/level-2.png", true)
+layer2.x = middlex
+layer2.y = middley
+local fishGroup = display.newGroup()
+localGroup:insert(fishGroup)
 local layer1 = display.newImage(localGroup, "graphics/level-1.png", true)
 layer1.x = middlex
 layer1.y = middley
-local bubbleSheet = require("Bubbles_UntitledSheet")
-local bubblesSheet = graphics.newImageSheet( "graphics/Bubbles_UntitledSheet.png", bubbleSheet.getSpriteSheetData() )
+local sheets = require("sheets")
+local bubblesSheet = graphics.newImageSheet( "graphics/Bubbles_UntitledSheet.png", sheets.getSpriteSheetDataBubbles() )
+local gameObjectsSheet = graphics.newImageSheet( "graphics/GameObjects_UntitledSheet.png", sheets.getSpriteSheetDataGameObjects() )
+local FishSheet = graphics.newImageSheet( "graphics/Fish_Fish.png", sheets.getSpriteSheetDataFish() )
+
 
 local bubbles = {}
 local bubblesGroup = display.newGroup()
 localGroup:insert(bubblesGroup)
+transitionStash.bubblesMove = {}
 local function makeBubbles()
 	for i = 1, 1 do
 		local index = #bubbles+1
@@ -31,11 +43,30 @@ local function makeBubbles()
 			display.remove(bubbles[index])
 			bubbles[index] = nil
 		end
-		transition.to(bubbles[index], {time=math.random(2000,10000), y = originy-100, onComplete = removeBubble})
+		transitionStash.bubblesMove[index] = transition.to(bubbles[index], {time=math.random(2000,10000), y = originy-100, onComplete = removeBubble})
 	end
 end
-timerStash.creatBubbles = timer.performWithDelay(1, makeBubbles, -1)
+timerStash.createBubbles = timer.performWithDelay(1, makeBubbles, -1)
 		
+local fishes = {}
+
+transitionStash.fishMove = {}
+local function makeFish()
+		local index = #fishes+1
+		fishes[index] = display.newImage( FishSheet, math.random(1,4), true)
+		fishGroup:insert(fishes[index])
+		local side = math.random(0,1)
+		if side == 0 then side = -1 end
+		fishes[index].x = side * (originx+pixelwidth) + side*200
+		fishes[index].y = math.random(originy, originy+pixelheight)
+		fishes[index].xScale = side
+		local function removeBubble()
+			display.remove(fishes[index])
+			fishes[index] = nil
+		end
+		transitionStash.fishMove[index] = transition.to(fishes[index], {time=math.random(5000,20000), x = -fishes[index].x, onComplete = removeBubble})
+end
+timerStash.createFish = timer.performWithDelay(2000, makeFish, -1)
 		
 
 --[[local bubbles = {}
@@ -73,7 +104,7 @@ local currentBall
 local pinsKnockedDown = 0
 local onLocalCollision
 for i = 1, numOfBalls do
-ball[i] = display.newCircle(localGroup, 0,0, 30 )
+ball[i] = display.newImage( gameObjectsSheet, 2, true)
 ball[i].x = originx + 25 + 25*i
 ball[i].y = originy + pixelheight - 50
 ball[i]:setFillColor(255)
@@ -94,7 +125,7 @@ local function initNewBall()
 		end
 	end
 	--print("currentBall: "..currentBall)
-	physics.addBody(ball[currentBall], "kinematic", {radius = 30, friction = 100, bounce = 0.05, density = 7})
+	physics.addBody(ball[currentBall], "kinematic", physicsData:get("ball"))
 	ball[currentBall].startX = originx + 200
 	ball[currentBall].startY = originy + pixelheight - 200
 	local function makeBallReady()
@@ -177,7 +208,7 @@ function touchBall(event)
 		ball[currentBall].prevY = ball[currentBall].y
 	elseif event.phase == "ended" or event.phase == "cancelled" then
 		ball[currentBall].bodyType = "dynamic"
-		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*2, (ball[currentBall].startY-ball[currentBall].y)*2, ball[currentBall].x, ball[currentBall].y )
+		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*5, (ball[currentBall].startY-ball[currentBall].y)*5, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
@@ -190,27 +221,26 @@ function touchBall(event)
 end
 
 
-
-local pin1 = display.newRect(localGroup, 0, 0, 20, 50)
+local pin1 = display.newImage( gameObjectsSheet, 3, true)
 pin1.x = 502
 pin1.y = 600
 pin1.isDown = false
-physics.addBody(pin1, "dynamic", {density = 0.5, friction = 0.05})
+physics.addBody(pin1, "dynamic", physicsData:get("seahorse"))
 pin1.myName = "pin1"
-pin1:setFillColor(0,255,0)
-local pin2 = display.newRect(localGroup, 0, 0, 20, 50)
+--pin1:setFillColor(0,255,0)
+local pin2 = display.newImage( gameObjectsSheet, 3, true)
 pin2.x = 967
 pin2.y = 600
 pin2.isDown = false
-pin2:setFillColor(0,255,0)
-physics.addBody(pin2, "dynamic", {density = 0.5, friction = 0.05})
+--pin2:setFillColor(0,255,0)
+physics.addBody(pin2, "dynamic", physicsData:get("seahorse"))
 pin2.myName = "pin2"
-local pin3 = display.newRect(localGroup, 0, 0, 20, 50)
+local pin3 = display.newImage( gameObjectsSheet, 3, true)
 pin3.x = 568
 pin3.y = 600
 pin3.isDown = false
-pin3:setFillColor(0,255,0)
-physics.addBody(pin3, "dynamic", {density = 0.5, friction = 0.05})
+--pin3:setFillColor(0,255,0)
+physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
 pin3.myName = "pin3"
 
 function onLocalCollision( self, event )
