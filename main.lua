@@ -178,6 +178,8 @@ function refreshData()
 	if loadFile("options.txt") == "empty" then
         options = {}
 		options["learnMode"] = 1
+		options["music"] = 1
+		options["sounds"] = 1
 		saveFile("options.txt", json.encode(options))
 	--[[elseif #options ~= #optionsOriginalData then
 		print("ok")
@@ -185,7 +187,7 @@ function refreshData()
 			if table.indexOf( options, optionsOriginalData[i] ) == nil then
 				options[#options +1] = optionsOriginalData[i]
 			end
-		end]]
+		end--]]
     end
 	--saveFile("options.txt", "empty") ---Uncomment to clear Data
 end
