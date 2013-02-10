@@ -615,6 +615,7 @@ function gameOver()
 	
 	local function pressNextBtn(event)
 		if event.phase == "release" then
+			_G.level = level+1
 			director:changeScene("game", "fade")
 			return true
 		end
@@ -624,10 +625,11 @@ function gameOver()
 	nextBtn.x = 560
 	nextBtn.y = 440
 	gameOverGroup:insert(nextBtn)
-	if howManyStars <= 0 then
-		nextBtn.isVisible = false
+	nextBtn.isVisible = false
+	if level < numOfLevels and howManyStars > 0 then
+		levelData["lvl"..level+1]["stars"] = 0
+		nextBtn.isVisible = true
 	end
-	
 	local function pressLearnBtn(event)
 		if event.phase == "release" then
 			return true
