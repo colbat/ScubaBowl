@@ -1,5 +1,10 @@
 module(..., package.seeall)
 
+
+backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )  -- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
+
+
+
 function new()
 updateMem()
 local localGroup = display.newGroup()
@@ -7,6 +12,8 @@ refreshData()
 physics.start()
 
 print("Level: "..level)
+
+
 
 
 local physicsData = (require "Physics").physicsData(1)
@@ -129,10 +136,41 @@ local numOfBalls = 2
 local currentBall
 local pinsKnockedDown = 0
 local onLocalCollision
+
+
+local followingBubblesGroup = display.newGroup()
+localGroup:insert(followingBubblesGroup)
+
+local charSequenceData = {
+    name = "char",
+	start = 1,
+	count = 2,
+}
+
+local charImgSheet = graphics.newImageSheet("graphics/Char_Character.png", sheets.getSpriteSheetDataChar())
+local char = display.newSprite(charImgSheet, charSequenceData )
+char.hand = display.newImage( charImgSheet, 3, true)
+localGroup:insert(char.hand)
+localGroup:insert(char)
+char.x = originx + 156
+char.y = originy + pixelheight - 125
+
+char.hand.x = originx + 156
+char.hand.y = originy + pixelheight - 150
+
+
+
+
 for i = 1, numOfBalls do
 ball[i] = display.newImage( gameObjectsSheet, 2, true)
-ball[i].x = originx + 25 + 25*i
-ball[i].y = originy + pixelheight - 50
+
+if i == 1 then
+	ball[i].x = originx + 60
+	ball[i].y = originy + pixelheight - 60
+else
+	ball[i].x = originx + 262 + 25*(i-2)
+	ball[i].y = originy + pixelheight - 60
+end
 ball[i]:setFillColor(255)
 ball[i].myName = "ball"
 ball[i].released = false
@@ -152,24 +190,33 @@ local function initNewBall()
 	end
 	--print("currentBall: "..currentBall)
 	physics.addBody(ball[currentBall], "kinematic", physicsData:get("ball"))
-	ball[currentBall].linearDamping = 0.5
-	ball[currentBall].startX = originx + 200
-	ball[currentBall].startY = originy + pixelheight - 200
+	ball[currentBall].linearDamping = 0.75
+	ball[currentBall].startingX = originx + 60
+	ball[currentBall].startingY = originy + pixelheight - 60
+	
+	ball[currentBall].startX = originx + 156
+	ball[currentBall].startY = originy + pixelheight - 150
+	
+	char:setFrame(2)
+	char.hand.rotation = 45
+	char.hand.x = originx + 156
+	char.hand.y = originy + pixelheight - 150
+	
 	local function makeBallReady()
 		touchScreen:addEventListener("touch", touchBall)
 		ball[currentBall].collision = onLocalCollision
 		ball[currentBall]:addEventListener( "collision", ball[currentBall] )
 		ball[currentBall].ready = true
 	end
-	transitionStash.initBallTrans = transition.to(ball[currentBall], {time = 1000, x = ball[currentBall].startX, y = ball[currentBall].startY, onComplete = makeBallReady})
-	
+	transitionStash.initBallTrans = transition.to(ball[currentBall], {time = 1000, x = ball[currentBall].startingX, y = ball[currentBall].startingY, onComplete = makeBallReady})
+	transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = ball[currentBall].startingX, y = ball[currentBall].startingY})
 end
 initNewBall()		
 
 local floor = display.newRect(localGroup, 0, 0, pixelwidth, 10 )
 floor.x = middlex
-floor.y = originy + pixelheight - 5
-floor:setFillColor(255)
+floor.y = originy + pixelheight - 10
+floor:setFillColor(255,0)
 physics.addBody(floor, "static", {bounce = 0.5, friction = 100})
 
 --[[local rightWall = display.newRect(localGroup, 0, 0, 10, pixelheight )
@@ -190,30 +237,35 @@ touchScreen.isHitTestable = true
 
 
 
+
+
+
 local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
 directionArrow:setFillColor(0,0,0,0)
-directionArrow.maxForce = 200
+directionArrow.maxForce = 140
 for i = 1, numOfBalls do
 	localGroup:insert(ball[i])
 end
+local ballTouchStarted = false
 function touchBall(event)
 	if ball[currentBall].ready == true then
-	if event.phase == "began" then
+	if event.phase == "began" and event.x >= ball[currentBall].x -100 and event.x <= ball[currentBall].x +100 and event.y >= ball[currentBall].y -100 and event.y <= ball[currentBall].y +100 then
+		
 		directionArrow:setFillColor(0,255,0,255)
 		directionArrow.x = ball[currentBall].startX
 		directionArrow.y = ball[currentBall].startY
 		directionArrow.alpha = 0
-		
-	elseif event.phase == "moved" then
+		ballTouchStarted = true
+		floor.isSensor = true
+	elseif event.phase == "moved" and ballTouchStarted == true then
 		ball[currentBall].x = event.x
 		ball[currentBall].y = event.y
 		local xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 		local lineAngle = math.deg( math.atan( yDist/xDist ) )
-		if math.sqrt(xDist^2+yDist^2) < directionArrow.maxForce then
-			directionArrow.width = math.sqrt(xDist^2+yDist^2) *2
+		if ( event.x < ball[currentBall].startX ) then lineAngle = lineAngle else lineAngle = lineAngle +180 end
+		if math.sqrt(xDist^2+yDist^2) <= directionArrow.maxForce then
+			directionArrow.width = math.sqrt(xDist^2+yDist^2) *3
 			directionArrow.rotation = lineAngle
-			directionArrow.x = ball[currentBall].startX
-			directionArrow.y = ball[currentBall].startY
 		else
 			local excessDist = directionArrow.maxForce/(math.sqrt(xDist^2+yDist^2))
 			--print(excessDist)
@@ -221,8 +273,11 @@ function touchBall(event)
 			ball[currentBall].y = ball[currentBall].startY - (ball[currentBall].startY-event.y) * excessDist
 			xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 			lineAngle = math.deg( math.atan( yDist/xDist ) )
-			directionArrow.width = math.sqrt(xDist^2+yDist^2) *2
+			if ( event.x < ball[currentBall].startX ) then lineAngle = lineAngle else lineAngle = lineAngle +180 end
+			directionArrow.width = math.sqrt(xDist^2+yDist^2) *3
 			directionArrow.rotation = lineAngle
+			--directionArrow.x = ball[currentBall].startX+(ball[currentBall].startX-event.x)
+			--directionArrow.y = ball[currentBall].startY+(ball[currentBall].startY-event.y)
 			--directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
 			--directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		end
@@ -232,9 +287,16 @@ function touchBall(event)
 		--directionArrow:setFillColor(255*(directionArrow.width/directionArrow.maxForce),255*(1-directionArrow.width/directionArrow.maxForce),0)
 		ball[currentBall].prevX = ball[currentBall].x
 		ball[currentBall].prevY = ball[currentBall].y
-	elseif event.phase == "ended" or event.phase == "cancelled" then
+		char.hand.x = ball[currentBall].x
+		char.hand.y = ball[currentBall].y
+		print(directionArrow.rotation+90)
+		char.hand.rotation = directionArrow.rotation+90
+		ball[currentBall].rotation = char.hand.rotation
+		directionArrow.x = ball[currentBall].startX+(ball[currentBall].startX-ball[currentBall].x)/2
+		directionArrow.y = ball[currentBall].startY+(ball[currentBall].startY-ball[currentBall].y)/2
+	elseif (event.phase == "ended" or event.phase == "cancelled") and ballTouchStarted == true then
 		ball[currentBall].bodyType = "dynamic"
-		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*10, (ball[currentBall].startY-ball[currentBall].y)*10, ball[currentBall].x, ball[currentBall].y )
+		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*15, (ball[currentBall].startY-ball[currentBall].y)*15, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
@@ -242,6 +304,12 @@ function touchBall(event)
 		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
 		ball[currentBall].released = true
+	
+		narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
+		char:setFrame(1)
+		transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = originx + 156, y = originy + pixelheight - 150})
+		ballTouchStarted = false
+		timerStash.MakeFloor = timer.performWithDelay( 35, function() floor.isSensor = false end )
 	end
 	end
 end
@@ -262,8 +330,8 @@ pin2.isDown = false
 --physics.addBody(pin2, "dynamic", physicsData:get("seahorse"))
 pin2.myName = "pin2"
 local pin3 = display.newImage( gameObjectsSheet, 3, true)
-pin3.x = 568
-pin3.y = 200
+pin3.x = 668
+pin3.y = 450
 pin3.isDown = false
 --pin3:setFillColor(0,255,0)
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
@@ -309,6 +377,9 @@ end
 Runtime:addEventListener("enterFrame", checkForCollsion)
 
 local try = 0
+local bubbleFrame = 0
+local followingBubbles = {}
+transitionStash.followingBubbles = {}
 local function checkBall(event)
 	if ball[currentBall] then
 	local vx, vy = ball[currentBall]:getLinearVelocity()
@@ -333,6 +404,20 @@ local function checkBall(event)
 		else try = try+1
 		end
 	else try = 0
+		bubbleFrame = bubbleFrame + 1
+		if bubbleFrame >= 3 and ball[currentBall].released == true then
+			bubbleFrame = 0
+			local index = #followingBubbles+1
+			followingBubbles[index] = display.newImage( bubblesSheet, math.random(7,10), true)
+			followingBubblesGroup:insert(followingBubbles[index])
+			followingBubbles[index].x = ball[currentBall].x
+			followingBubbles[index].y = ball[currentBall].y
+			local function removeBubble()
+				display.remove(followingBubbles[index])
+				followingBubbles[index] = nil
+			end
+			transitionStash.followingBubbles[index] = transition.to(followingBubbles[index], {time=200, alpha = 0, delay = 2000, onComplete = removeBubble})
+		end
 	end
 end
 end

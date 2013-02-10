@@ -37,7 +37,6 @@ lvlButtons = {}
 for i = 1, 3 do
 	lvlButtons[i] = display.newImage("graphics/level1Button.png")
 	lvlButtons[i].level = i
-
 	lvlButtons[i].lvlText = display.newText("Level " .. i, 0, 0, "Wasser", 20)
 	lvlButtons[i].lvlText:setTextColor(0, 0, 0)
 

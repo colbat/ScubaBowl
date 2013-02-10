@@ -30,8 +30,8 @@ io.output():setvbuf('no') 		-- **debug: disable output buffering for Xcode Conso
 --Sounds-----
 -----------------
 
---
-
+_G.backgroundMusic = audio.loadStream("background.wav")
+_G.shooting_ball = audio.loadStream("shooting_ball.wav")
 
 
 
