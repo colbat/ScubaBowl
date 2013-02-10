@@ -19,12 +19,14 @@ function getSpriteSheetDataBubbles()
 
 			--FRAME "buble-2":
 			{
-				x = 48,
-				y = 0,
+				x = 0,
+				y = 44,
 				width = 34,
 				height = 32
 
 			},
+
+			
 
 			--FRAME "buble-3":
 			{
@@ -34,11 +36,10 @@ function getSpriteSheetDataBubbles()
 				height = 21
 
 			},
-
 			--FRAME "buble-4":
 			{
-				x = 0,
-				y = 44,
+				x = 76,
+				y = 56,
 				width = 17,
 				height = 16
 
@@ -46,29 +47,67 @@ function getSpriteSheetDataBubbles()
 
 			--FRAME "buble-5":
 			{
-				x = 24,
-				y = 44,
+				x = 112,
+				y = 16,
 				width = 12,
 				height = 12
 
 			},
 
+
 			--FRAME "buble-6":
 			{
-				x = 76,
-				y = 36,
+				x = 48,
+				y = 64,
 				width = 11,
 				height = 10
 
-			}
+			},
+			
 
+			--FRAME "buble-3-strong":
+			{
+				x = 88,
+				y = 0,
+				width = 23,
+				height = 21
+
+			},
+			--FRAME "buble-2-strong":
+			{
+				x = 48,
+				y = 0,
+				width = 34,
+				height = 32
+
+			},
+			
+
+			--FRAME "buble-4-strong":
+			{
+				x = 76,
+				y = 36,
+				width = 17,
+				height = 16
+
+			},
+			
+			--FRAME "buble-5-strong":
+			{
+				x = 112,
+				y = 0,
+				width = 12,
+				height = 12
+
+			},
+			
+			
 		},
-		sheetContentWidth = 88,
-		sheetContentHeight = 60
+		sheetContentWidth = 124,
+		sheetContentHeight = 76
 	}
 	return options
 end
-
 function getSpriteSheetDataGameObjects()
 
 	local options = {
