@@ -8,8 +8,16 @@ physics.start()
 
 print("Level: "..level)
 
+local menuGroup
+local pause
+local restartButton
+local resumeButton
+local goToMenu
 
 local physicsData = (require "Physics").physicsData(1)
+local checkBall
+local checkForCollsion
+local layerMovement
 
 local background = display.newImage(localGroup, "graphics/background.jpg", true)
 background.x = middlex
@@ -44,7 +52,10 @@ function changeLight()
 	transitionStash.changeLight1a = transition.to(layer3a, {time = 1000, alpha = 0, onComplete = changeLight2})
 	transitionStash.changeLight1b = transition.to(layer3b, {time = 1000, alpha = 1})
 end
+
 changeLight()
+
+
 local bubbles = {}
 local bubblesGroup = display.newGroup()
 localGroup:insert(bubblesGroup)
@@ -184,9 +195,68 @@ leftWall.y = middley
 leftWall:setFillColor(255)
 physics.addBody(leftWall, "static", {bounce = 0.05, friction = 1})
 ]]
-touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
+
+local function gameResume()
+	menuGroup:removeSelf()
+end
+
+local function deleteListeners()
+	print("delete listerners")
+	Runtime:removeEventListener("enterFrame", checkBall)
+	Runtime:removeEventListener("enterFrame", checkForCollsion)	
+	Runtime:removeEventListener( "enterFrame", displayBubbleTips )
+	Runtime:removeEventListener("enterFrame", layerMovement)
+end
+
+local function restartLink( event )
+	print("restart link")
+	deleteListeners()
+	director:changeScene("game", "fade")
+end
+
+local function resumeLink( event )
+		print("resume link")
+		gameResume()
+end
+
+local function displayMainMenu( event )
+		deleteListeners()
+		print("menu link")
+		director:changeScene("mainMenu", "fade")
+end
+
+local function gamePause(event)
+	menuGroup = display.newGroup()
+	if event.phase == "ended" then
+		print("game paused")
+		restartButton = display.newImage("graphics/restartButton.png" )
+		restartButton.y = display.contentCenterY
+		restartButton.x = middlex
+		restartButton:addEventListener("touch",restartLink)
+		resumeButton = display.newImage("graphics/continueButton.png" )
+		resumeButton.y = display.contentCenterY
+		resumeButton.x = middlex - 280
+		resumeButton:addEventListener("touch",resumeLink)
+		goToMenu = display.newImage("graphics/menuButton.png" )
+		goToMenu.y = display.contentCenterY
+		goToMenu.x = middlex + 280
+		goToMenu:addEventListener("touch",displayMainMenu)
+		menuGroup:insert(restartButton)
+		menuGroup:insert(resumeButton)
+		menuGroup:insert(goToMenu)
+	end
+end
+
+
+touchScreen = display.newRect(localGroup, originx + 50, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
+
+pause = display.newRect(localGroup, originx,originy, 30, 30 )
+pause.strokeWidth = 3
+pause:setFillColor(140, 140, 140)
+pause:setStrokeColor(180, 180, 180)
+pause:addEventListener("touch",gamePause)
 
 
 
@@ -269,26 +339,43 @@ pin3.isDown = false
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
 pin3.myName = "pin3"
 
-local function checkForCollsion()
+local myAreaTipsWidth = pixelwidth / 2
+local myAreaTipsHeight = pixelheight / 2
+local bulleImg
+local myTips
+local animation
+local myAreaTips = display.newRect(originx, 0, myAreaTipsWidth, myAreaTipsHeight)
+myAreaTips.alpha = false
+--myAreaTips.strokeWidth = 3
+--myAreaTips:setFillColor( pink )
+--myAreaTips:setStrokeColor(180, 180, 180)
+
+function checkForCollsion()
 	if pin1.isDown == false then
-		if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
-			print("Pin1 Down")
-			pin1:setFillColor(255,0,0)
-			pin1.isDown = true
+		if ball[currentBall].x and ball[currentBall].x then
+			if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
+				print("Pin1 Down")
+				pin1:setFillColor(255,0,0)
+				pin1.isDown = true
+			end
 		end
 	end
 	if pin2.isDown == false then
-		if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
-			print("Pin2 Down")
-			pin2:setFillColor(255,0,0)
-			pin2.isDown = true
+		if ball[currentBall].x and ball[currentBall].x then
+			if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
+				print("Pin2 Down")
+				pin2:setFillColor(255,0,0)
+				pin2.isDown = true
+			end
 		end
 	end
 	if pin3.isDown == false then
-		if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
-			print("Pin3 Down")
-			pin3:setFillColor(255,0,0)
-			pin3.isDown = true
+		if ball[currentBall].x and ball[currentBall].x then
+			if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
+				print("Pin3 Down")
+				pin3:setFillColor(255,0,0)
+				pin3.isDown = true
+			end
 		end
 	end
 	if pin1.isDown == true and pin2.isDown == true and pin3.isDown == true then
@@ -298,7 +385,7 @@ end
 Runtime:addEventListener("enterFrame", checkForCollsion)
 
 local try = 0
-local function checkBall(event)
+function checkBall(event)
 	if ball[currentBall] then
 	local vx, vy = ball[currentBall]:getLinearVelocity()
 	if ball[currentBall].stopped == false and ball[currentBall].released == true and ((math.abs(vx) < 5 and math.abs(vy) < 5)  or ball[currentBall].x > originx+pixelwidth or ball[currentBall].x < originx) then
@@ -325,8 +412,44 @@ local function checkBall(event)
 	end
 end
 end
-Runtime:addEventListener("enterFrame", checkBall)
 
+local function displayPopUpTips(event)
+	physics.pause()
+	--list = widget.newTableView( listOptions )
+	--tips = display.newText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et erat a quam vehicula tincidunt. Sed at tellus et sem condimentum tempor. Vestibulum placerat vulputate luctus.",bulleImg.x - 30, bulleImg.y, native.systemFont, 12)
+end
+
+local function deleteBubbleTips()
+	display.remove(myTips)
+	display.remove(bulleImg)
+	myTips = nil
+	bulleImg = nil
+end
+
+local function displayBubbleTips(event)
+	if ball[currentBall] and ball[currentBall].y and ball[currentBall].x then
+		if myTips == nil and ball[currentBall].y < myAreaTipsHeight and ball[currentBall].x < myAreaTipsWidth then
+			bulleImg = display.newImage( "graphics/bullesbleue.png" )
+			bulleImg.alpha = 0.2
+			bulleImg.x = originx + 200
+			bulleImg.y = originy + 200
+			
+			myTips = display.newText("Tips",bulleImg.x - 30, bulleImg.y, native.systemFont, 12)
+			myTips:setTextColor( gray )
+			myTips.size = 24
+			animation = display.newGroup()
+			animation.x, animation.y = 100, 100
+			animation:insert( bulleImg )
+			animation:insert( myTips )
+			animation:addEventListener("touch", displayPopUpTips)
+			localGroup:insert(animation)
+			transitionStash.trans = transition.to( animation, { time=4000, delay=2500, alpha=0,x=(animation.x+50), y=(animation.x-200), onComplete=deleteBubbleTips } )
+		end
+	end
+end
+
+Runtime:addEventListener("enterFrame", checkBall)
+Runtime:addEventListener( "enterFrame", displayBubbleTips )
 
 function gameOver()
 	--physics.stop()
@@ -335,7 +458,7 @@ function gameOver()
 	Runtime:removeEventListener("enterFrame", checkForCollsion)
 end
 
-local function layerMovement (event)
+function layerMovement (event)
 if ball[currentBall] then
 if layer2 then
 	
