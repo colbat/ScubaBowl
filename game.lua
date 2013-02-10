@@ -1,5 +1,10 @@
 module(..., package.seeall)
 
+
+backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )  -- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
+
+
+
 function new()
 updateMem()
 local localGroup = display.newGroup()
@@ -7,6 +12,8 @@ refreshData()
 physics.start()
 
 print("Level: "..level)
+
+
 
 
 local physicsData = (require "Physics").physicsData(1)
@@ -198,7 +205,6 @@ local charImgSheet = graphics.newImageSheet("graphics/Char_Character.png", sheet
 local char = display.newSprite(locaGroup, charImgSheet, charSequenceData )
 
 
-
 local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
 directionArrow:setFillColor(0,0,0,0)
 directionArrow.maxForce = 200
@@ -251,6 +257,9 @@ function touchBall(event)
 		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
 		ball[currentBall].released = true
+		
+	
+		narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
 	end
 	end
 end
