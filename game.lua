@@ -19,7 +19,7 @@ local restartButton
 local resumeButton
 local goToMenu
 
-
+local list
 
 local physicsData = (require "Physics").physicsData(1)
 local checkBall
@@ -506,10 +506,21 @@ function checkBall(event)
 end
 end
 
-local function displayPopUpTips(event)
-	physics.pause()
-	--list = widget.newTableView( listOptions )
-	--tips = display.newText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et erat a quam vehicula tincidunt. Sed at tellus et sem condimentum tempor. Vestibulum placerat vulputate luctus.",bulleImg.x - 30, bulleImg.y, native.systemFont, 12)
+local function onRowRender( tip )
+        local row = event.target
+        local rowGroup = event.view
+        local tipTexte = tip.text
+
+        local text = display.newText(tipTexte, 0, 0, native.systemFont, 18)
+        text:setReferencePoint( display.CenterLeftReferencePoint )
+        text.y = row.height * 0.5
+        if not row.isCategory then
+                text.x = 15
+                text:setTextColor( 0 )
+        end
+
+        -- must insert everything into event.view:
+        rowGroup:insert( text )
 end
 
 local function deleteBubbleTips()
@@ -519,22 +530,39 @@ local function deleteBubbleTips()
 	bulleImg = nil
 end
 
+local function showTipPopup()
+	display.remove(animation)
+	animation = nil
+	local options =
+	{
+	    hasBackground=false,
+	    baseUrl=system.DocumentsDirectory,
+	    urlRequest=listener
+	}
+	native.showWebPopup( "tips1.html", options )
+end
+
 local function displayBubbleTips(event)
 	if ball[currentBall] and ball[currentBall].y and ball[currentBall].x then
 		if myTips == nil and ball[currentBall].y < myAreaTipsHeight and ball[currentBall].x < myAreaTipsWidth then
+
 			bulleImg = display.newImage( "graphics/bullesbleue.png" )
 			bulleImg.alpha = 0.2
 			bulleImg.x = originx + 200
 			bulleImg.y = originy + 200
 			
-			myTips = display.newText("Tips",bulleImg.x - 30, bulleImg.y, native.systemFont, 12)
+			myTips = display.newText("Viscosity causes the path to be asymmetric.",bulleImg.x - 30, bulleImg.y, native.systemFont, 18)
+			link = display.newText("Learn more",bulleImg.x , bulleImg.y + 50, native.systemFont, 18)
 			myTips:setTextColor( gray )
-			myTips.size = 24
+			link:setTextColor( gray )
+
 			animation = display.newGroup()
 			animation.x, animation.y = 100, 100
 			animation:insert( bulleImg )
 			animation:insert( myTips )
-			animation:addEventListener("touch", displayPopUpTips)
+			animation:insert( link )
+			animation:addEventListener("touch", showTipPopup)
+
 			localGroup:insert(animation)
 			transitionStash.trans = transition.to( animation, { time=4000, delay=2500, alpha=0,x=(animation.x+50), y=(animation.x-200), onComplete=deleteBubbleTips } )
 		end
