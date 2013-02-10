@@ -304,16 +304,12 @@ function touchBall(event)
 		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
 		ball[currentBall].released = true
-<<<<<<< HEAD
-		
 	
 		narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
-=======
 		char:setFrame(1)
 		transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = originx + 156, y = originy + pixelheight - 150})
 		ballTouchStarted = false
 		timerStash.MakeFloor = timer.performWithDelay( 35, function() floor.isSensor = false end )
->>>>>>> Added character and path
 	end
 	end
 end
