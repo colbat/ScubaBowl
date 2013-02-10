@@ -31,6 +31,7 @@ loadFile = ego.loadFile
 --gameNetwork = require "gameNetwork"
 crypto = require "crypto"
 
+numOfLevels = 3
 
 
 
@@ -157,7 +158,38 @@ function internetConnection()
 end
 
 function refreshData()
-    
+    levelData = json.decode(loadFile("levelData.txt"))
+    if loadFile("levelData.txt") == "empty" then
+        levelData = {}
+		for i = 1, numOfLevels do
+			levelData["lvl"..i] = {}
+			levelData["lvl"..i]["stars"] = "locked"
+			levelData["lvl"..i]["highscore"] = 0
+		end
+		levelData["lvl1"]["stars"] = 0
+		saveFile("levelData.txt", json.encode(levelData))	
+    end
+
+	--saveFile("levelData.txt", "empty") ---Uncomment to clear Data
+	print_table(levelData, "LevelData")
+	options = json.decode(loadFile("options.txt"))
+	optionsOriginalData = {learnMode = 1, sounds = 1, music = 1}
+	--print(#options, #optionsOriginalData)
+	if loadFile("options.txt") == "empty" then
+        options = {}
+		options["learnMode"] = 1
+		options["music"] = 1
+		options["sounds"] = 1
+		saveFile("options.txt", json.encode(options))
+	--[[elseif #options ~= #optionsOriginalData then
+		print("ok")
+		for i = 1, #optionsOriginalData do
+			if table.indexOf( options, optionsOriginalData[i] ) == nil then
+				options[#options +1] = optionsOriginalData[i]
+			end
+		end--]]
+    end
+	--saveFile("options.txt", "empty") ---Uncomment to clear Data
 end
 refreshData()
 

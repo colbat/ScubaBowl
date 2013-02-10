@@ -9,7 +9,7 @@ local localGroup = display.newGroup()
 
 
 
-
+_G.sheets = require("sheets")
 _G.widget = require("widget")
 _G.socket = require("socket")
 _G.http = require("socket.http")
@@ -18,6 +18,7 @@ _G.lfs = require "lfs"
 _G.physics = require("physics")
 io.output():setvbuf('no') 		-- **debug: disable output buffering for Xcode Console
 --_G.slideView = require "slideView"
+_G.myWidget = require "myWidget"
 
 
 
@@ -30,8 +31,8 @@ io.output():setvbuf('no') 		-- **debug: disable output buffering for Xcode Conso
 --Sounds-----
 -----------------
 
---
-
+_G.backgroundMusic = audio.loadStream("background.wav")
+_G.shooting_ball = audio.loadStream("shooting_ball.wav")
 
 
 

@@ -24,7 +24,7 @@
 			<key>MaxSheetSize</key>
 			<integer>4096</integer>
 			<key>NpotSize</key>
-			<string>{88, 60}</string>
+			<string>{124, 76}</string>
 			<key>Padding</key>
 			<integer>8</integer>
 			<key>PixelFormat</key>
@@ -43,8 +43,8 @@
 				<dict>
 					<key>DocumentSecurityImageBookmark</key>
 					<data>
-					Ym9va9gCAAAAAAQQMAAAABqOp4rwHlygRqJG
-					XDPe/mnBgsP3TZPYYFCCNsKjNpRJvAEAAAUA
+					Ym9va9gCAAAAAAQQMAAAAEJL53R+nM3N3xhV
+					1MnDu0NxPFocc6nvKMpRmA5yU46RvAEAAAUA
 					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
 					bgAABwAAAAEBAABEZXNrdG9wAAsAAAABAQAA
 					YnVibGUtMS5wbmcAEAAAAAEGAAAEAAAAFAAA
@@ -174,8 +174,8 @@
 				<dict>
 					<key>DocumentSecurityImageBookmark</key>
 					<data>
-					Ym9va9gCAAAAAAQQMAAAAOrx0WY9gXQKl/KL
-					2AHuEMFTIzPXCdm/jGLrlW7hkNT/vAEAAAUA
+					Ym9va9gCAAAAAAQQMAAAAPG06iobe+36F6tW
+					e+Su/8fzbQRvTifMUi2SXb6E/qdvvAEAAAUA
 					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
 					bgAABwAAAAEBAABEZXNrdG9wAAsAAAABAQAA
 					YnVibGUtMi5wbmcAEAAAAAEGAAAEAAAAFAAA
@@ -256,9 +256,9 @@
 						<key>FlipY</key>
 						<false/>
 						<key>Frame</key>
-						<string>{{48, 0}, {34, 32}}</string>
+						<string>{{0, 44}, {34, 32}}</string>
 						<key>Frame-HD</key>
-						<string>{{48, 0}, {34, 32}}</string>
+						<string>{{0, 44}, {34, 32}}</string>
 						<key>Image</key>
 						<string>Bubbles_UntitledSheet.png</string>
 						<key>Image-HD</key>
@@ -279,6 +279,138 @@
 						<string>/Users/Stiven/Desktop/buble-2.png</string>
 						<key>OriginalImage_RelativePath</key>
 						<string>../../buble-2.png/</string>
+						<key>OriginalRect</key>
+						<string>{{0, 0}, {34, 32}}</string>
+						<key>OriginalSize</key>
+						<string>{34, 32}</string>
+						<key>Position</key>
+						<string>{0, 44}</string>
+						<key>Scale</key>
+						<string>{1, 1}</string>
+						<key>SpriteSize</key>
+						<string>{34, 32}</string>
+						<key>SpriteWasBreaked</key>
+						<false/>
+						<key>Tag</key>
+						<integer>0</integer>
+						<key>TextureOffset</key>
+						<string>{0, 0}</string>
+						<key>UsesBatchRendering</key>
+						<true/>
+						<key>ZOrder</key>
+						<integer>0</integer>
+					</dict>
+				</dict>
+				<key>buble-2-strong</key>
+				<dict>
+					<key>DocumentSecurityImageBookmark</key>
+					<data>
+					Ym9va+ACAAAAAAQQMAAAAItzkzPz2S0xtNQ2
+					pVCDa7BW3cFew65+2/YFCyIHnKvxxAEAAAUA
+					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
+					bgAABwAAAAEBAABEZXNrdG9wABIAAAABAQAA
+					YnVibGUtMi1zdHJvbmcucG5nAAAQAAAAAQYA
+					AAQAAAAUAAAAJAAAADQAAAAIAAAABAMAACnA
+					AAAAAAAACAAAAAQDAABJ9gUAAAAAAAgAAAAE
+					AwAA3fYFAAAAAAAIAAAABAMAAD1GoQEAAAAA
+					EAAAAAEGAABoAAAAeAAAAIgAAACYAAAACAAA
+					AAAEAABBtsg3TwAAABgAAAABAgAAAQAAAAAA
+					AAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAE
+					AAAAAwMAAAMAAAAEAAAAAwMAAAEAAAAIAAAA
+					BAMAAAIAAAAAAAAABAAAAAMDAAD1AQAADAAA
+					AAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAAAg
+					iD06AAAACAAAAAAEAABBtWww4AAAACQAAAAB
+					AQAAN0Q3RThFMjgtMERCRi0zQzAyLUJCN0Yt
+					RjZENUJGMjMwRTQzGAAAAAECAACBAAAAAQAI
+					AO8/AAABAAgAAAAAAAAAAAABAAAAAQEAAC8A
+					AAAEAAAAAwMAAAAIACjkAAAA/v///wEAAAAA
+					AAAAEgAAAAQQAABQAAAAAAAAAAUQAACoAAAA
+					AAAAABAQAADQAAAAAAAAAEAQAADAAAAAAAAA
+					AFQQAAD4AAAAAAAAAFUQAAAEAQAAAAAAAFYQ
+					AADwAAAAAAAAAAIgAACsAQAAAAAAABAgAAAs
+					AQAAAAAAABEgAABgAQAAAAAAABIgAABAAQAA
+					AAAAABMgAABQAQAAAAAAACAgAACMAQAAAAAA
+					ADAgAADwAAAAAAAAAAHAAAAQAQAAAAAAABHA
+					AAAUAAAAAAAAABLAAAAgAQAAAAAAABDQAAC4
+					AQAAAAAAAA==
+					</data>
+					<key>IsSHSprite</key>
+					<true/>
+					<key>PhysicProperties</key>
+					<dict>
+						<key>AngularDamping</key>
+						<real>0.0</real>
+						<key>AngularVelocity</key>
+						<real>0.0</real>
+						<key>CanSleep</key>
+						<true/>
+						<key>FixedRot</key>
+						<false/>
+						<key>GravityScale</key>
+						<real>1</real>
+						<key>HandledBySH</key>
+						<true/>
+						<key>IsBullet</key>
+						<false/>
+						<key>LinearDamping</key>
+						<real>0.0</real>
+						<key>LinearVelocity</key>
+						<string>{0, 0}</string>
+						<key>SH_ComplexShapes</key>
+						<array/>
+						<key>Type</key>
+						<integer>3</integer>
+					</dict>
+					<key>SHSheetName</key>
+					<string>UntitledSheet</string>
+					<key>SHSpriteName</key>
+					<string>buble-2-strong</string>
+					<key>SheetImage</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>SheetImage-HD</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>TextureProperties</key>
+					<dict>
+						<key>Angle</key>
+						<integer>0</integer>
+						<key>Border</key>
+						<integer>0</integer>
+						<key>CanBeTrimmed</key>
+						<true/>
+						<key>Color</key>
+						<string>{{1, 1}, {1, 1}}</string>
+						<key>ConvertedFromOldFormat</key>
+						<false/>
+						<key>CustomClassName</key>
+						<string></string>
+						<key>FlipX</key>
+						<false/>
+						<key>FlipY</key>
+						<false/>
+						<key>Frame</key>
+						<string>{{48, 0}, {34, 32}}</string>
+						<key>Frame-HD</key>
+						<string>{{48, 0}, {34, 32}}</string>
+						<key>Image</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>Image-HD</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>IsCropped</key>
+						<false/>
+						<key>IsDrawable</key>
+						<true/>
+						<key>IsRotated</key>
+						<false/>
+						<key>IsTrimmed</key>
+						<false/>
+						<key>Name</key>
+						<string>buble-2-strong</string>
+						<key>Opacity</key>
+						<real>1</real>
+						<key>OriginalImage</key>
+						<string>/Users/Stiven/Desktop/buble-2-strong.png</string>
+						<key>OriginalImage_RelativePath</key>
+						<string>../../buble-2-strong.png/</string>
 						<key>OriginalRect</key>
 						<string>{{0, 0}, {34, 32}}</string>
 						<key>OriginalSize</key>
@@ -305,8 +437,8 @@
 				<dict>
 					<key>DocumentSecurityImageBookmark</key>
 					<data>
-					Ym9va9gCAAAAAAQQMAAAAIAqiRBqyPv7RnhD
-					b6VkkG+pVE7rftQpEnvyDIgDLd1GvAEAAAUA
+					Ym9va9gCAAAAAAQQMAAAAPITwpniibBfqZ3m
+					FJ29p1vO4NOUkZw182EihkcqpsgFvAEAAAUA
 					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
 					bgAABwAAAAEBAABEZXNrdG9wAAsAAAABAQAA
 					YnVibGUtMy5wbmcAEAAAAAEGAAAEAAAAFAAA
@@ -432,12 +564,144 @@
 						<integer>0</integer>
 					</dict>
 				</dict>
+				<key>buble-3-strong</key>
+				<dict>
+					<key>DocumentSecurityImageBookmark</key>
+					<data>
+					Ym9va+ACAAAAAAQQMAAAAJbSLuIB7s//7CC2
+					HvvpbXRxUFf/5zajf7C5q724wfh8xAEAAAUA
+					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
+					bgAABwAAAAEBAABEZXNrdG9wABIAAAABAQAA
+					YnVibGUtMy1zdHJvbmcucG5nAAAQAAAAAQYA
+					AAQAAAAUAAAAJAAAADQAAAAIAAAABAMAACnA
+					AAAAAAAACAAAAAQDAABJ9gUAAAAAAAgAAAAE
+					AwAA3fYFAAAAAAAIAAAABAMAACdGoQEAAAAA
+					EAAAAAEGAABoAAAAeAAAAIgAAACYAAAACAAA
+					AAAEAABBtsg3RgAAABgAAAABAgAAAQAAAAAA
+					AAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAE
+					AAAAAwMAAAMAAAAEAAAAAwMAAAEAAAAIAAAA
+					BAMAAAIAAAAAAAAABAAAAAMDAAD1AQAADAAA
+					AAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAAAg
+					iD06AAAACAAAAAAEAABBtWww4AAAACQAAAAB
+					AQAAN0Q3RThFMjgtMERCRi0zQzAyLUJCN0Yt
+					RjZENUJGMjMwRTQzGAAAAAECAACBAAAAAQAI
+					AO8/AAABAAgAAAAAAAAAAAABAAAAAQEAAC8A
+					AAAEAAAAAwMAAAAIACjkAAAA/v///wEAAAAA
+					AAAAEgAAAAQQAABQAAAAAAAAAAUQAACoAAAA
+					AAAAABAQAADQAAAAAAAAAEAQAADAAAAAAAAA
+					AFQQAAD4AAAAAAAAAFUQAAAEAQAAAAAAAFYQ
+					AADwAAAAAAAAAAIgAACsAQAAAAAAABAgAAAs
+					AQAAAAAAABEgAABgAQAAAAAAABIgAABAAQAA
+					AAAAABMgAABQAQAAAAAAACAgAACMAQAAAAAA
+					ADAgAADwAAAAAAAAAAHAAAAQAQAAAAAAABHA
+					AAAUAAAAAAAAABLAAAAgAQAAAAAAABDQAAC4
+					AQAAAAAAAA==
+					</data>
+					<key>IsSHSprite</key>
+					<true/>
+					<key>PhysicProperties</key>
+					<dict>
+						<key>AngularDamping</key>
+						<real>0.0</real>
+						<key>AngularVelocity</key>
+						<real>0.0</real>
+						<key>CanSleep</key>
+						<true/>
+						<key>FixedRot</key>
+						<false/>
+						<key>GravityScale</key>
+						<real>1</real>
+						<key>HandledBySH</key>
+						<true/>
+						<key>IsBullet</key>
+						<false/>
+						<key>LinearDamping</key>
+						<real>0.0</real>
+						<key>LinearVelocity</key>
+						<string>{0, 0}</string>
+						<key>SH_ComplexShapes</key>
+						<array/>
+						<key>Type</key>
+						<integer>3</integer>
+					</dict>
+					<key>SHSheetName</key>
+					<string>UntitledSheet</string>
+					<key>SHSpriteName</key>
+					<string>buble-3-strong</string>
+					<key>SheetImage</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>SheetImage-HD</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>TextureProperties</key>
+					<dict>
+						<key>Angle</key>
+						<integer>0</integer>
+						<key>Border</key>
+						<integer>0</integer>
+						<key>CanBeTrimmed</key>
+						<true/>
+						<key>Color</key>
+						<string>{{1, 1}, {1, 1}}</string>
+						<key>ConvertedFromOldFormat</key>
+						<false/>
+						<key>CustomClassName</key>
+						<string></string>
+						<key>FlipX</key>
+						<false/>
+						<key>FlipY</key>
+						<false/>
+						<key>Frame</key>
+						<string>{{88, 0}, {23, 21}}</string>
+						<key>Frame-HD</key>
+						<string>{{88, 0}, {23, 21}}</string>
+						<key>Image</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>Image-HD</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>IsCropped</key>
+						<false/>
+						<key>IsDrawable</key>
+						<true/>
+						<key>IsRotated</key>
+						<false/>
+						<key>IsTrimmed</key>
+						<false/>
+						<key>Name</key>
+						<string>buble-3-strong</string>
+						<key>Opacity</key>
+						<real>1</real>
+						<key>OriginalImage</key>
+						<string>/Users/Stiven/Desktop/buble-3-strong.png</string>
+						<key>OriginalImage_RelativePath</key>
+						<string>../../buble-3-strong.png/</string>
+						<key>OriginalRect</key>
+						<string>{{0, 0}, {23, 21}}</string>
+						<key>OriginalSize</key>
+						<string>{23, 21}</string>
+						<key>Position</key>
+						<string>{88, 0}</string>
+						<key>Scale</key>
+						<string>{1, 1}</string>
+						<key>SpriteSize</key>
+						<string>{23, 21}</string>
+						<key>SpriteWasBreaked</key>
+						<false/>
+						<key>Tag</key>
+						<integer>0</integer>
+						<key>TextureOffset</key>
+						<string>{0, 0}</string>
+						<key>UsesBatchRendering</key>
+						<true/>
+						<key>ZOrder</key>
+						<integer>0</integer>
+					</dict>
+				</dict>
 				<key>buble-4</key>
 				<dict>
 					<key>DocumentSecurityImageBookmark</key>
 					<data>
-					Ym9va9gCAAAAAAQQMAAAAMVDiaqXPt91RnMI
-					rebTHOtc2dxX9Y9os0JLKeeujfx9vAEAAAUA
+					Ym9va9gCAAAAAAQQMAAAABE9dfqnGjfPd5pF
+					nUuiGgirLf8fESPGa4rhMIJ29Db/vAEAAAUA
 					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
 					bgAABwAAAAEBAABEZXNrdG9wAAsAAAABAQAA
 					YnVibGUtNC5wbmcAEAAAAAEGAAAEAAAAFAAA
@@ -518,9 +782,9 @@
 						<key>FlipY</key>
 						<false/>
 						<key>Frame</key>
-						<string>{{0, 44}, {17, 16}}</string>
+						<string>{{76, 56}, {17, 16}}</string>
 						<key>Frame-HD</key>
-						<string>{{0, 44}, {17, 16}}</string>
+						<string>{{76, 56}, {17, 16}}</string>
 						<key>Image</key>
 						<string>Bubbles_UntitledSheet.png</string>
 						<key>Image-HD</key>
@@ -546,7 +810,139 @@
 						<key>OriginalSize</key>
 						<string>{17, 16}</string>
 						<key>Position</key>
-						<string>{0, 44}</string>
+						<string>{76, 56}</string>
+						<key>Scale</key>
+						<string>{1, 1}</string>
+						<key>SpriteSize</key>
+						<string>{17, 16}</string>
+						<key>SpriteWasBreaked</key>
+						<false/>
+						<key>Tag</key>
+						<integer>0</integer>
+						<key>TextureOffset</key>
+						<string>{0, 0}</string>
+						<key>UsesBatchRendering</key>
+						<true/>
+						<key>ZOrder</key>
+						<integer>0</integer>
+					</dict>
+				</dict>
+				<key>buble-4-strong</key>
+				<dict>
+					<key>DocumentSecurityImageBookmark</key>
+					<data>
+					Ym9va+ACAAAAAAQQMAAAAOJ+4+OG10DIAOA3
+					XOnocjgsDzoQVgnbiHh9cEa50ZHsxAEAAAUA
+					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
+					bgAABwAAAAEBAABEZXNrdG9wABIAAAABAQAA
+					YnVibGUtNC1zdHJvbmcucG5nAAAQAAAAAQYA
+					AAQAAAAUAAAAJAAAADQAAAAIAAAABAMAACnA
+					AAAAAAAACAAAAAQDAABJ9gUAAAAAAAgAAAAE
+					AwAA3fYFAAAAAAAIAAAABAMAADJGoQEAAAAA
+					EAAAAAEGAABoAAAAeAAAAIgAAACYAAAACAAA
+					AAAEAABBtsg3SwAAABgAAAABAgAAAQAAAAAA
+					AAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAE
+					AAAAAwMAAAMAAAAEAAAAAwMAAAEAAAAIAAAA
+					BAMAAAIAAAAAAAAABAAAAAMDAAD1AQAADAAA
+					AAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAAAg
+					iD06AAAACAAAAAAEAABBtWww4AAAACQAAAAB
+					AQAAN0Q3RThFMjgtMERCRi0zQzAyLUJCN0Yt
+					RjZENUJGMjMwRTQzGAAAAAECAACBAAAAAQAI
+					AO8/AAABAAgAAAAAAAAAAAABAAAAAQEAAC8A
+					AAAEAAAAAwMAAAAIACjkAAAA/v///wEAAAAA
+					AAAAEgAAAAQQAABQAAAAAAAAAAUQAACoAAAA
+					AAAAABAQAADQAAAAAAAAAEAQAADAAAAAAAAA
+					AFQQAAD4AAAAAAAAAFUQAAAEAQAAAAAAAFYQ
+					AADwAAAAAAAAAAIgAACsAQAAAAAAABAgAAAs
+					AQAAAAAAABEgAABgAQAAAAAAABIgAABAAQAA
+					AAAAABMgAABQAQAAAAAAACAgAACMAQAAAAAA
+					ADAgAADwAAAAAAAAAAHAAAAQAQAAAAAAABHA
+					AAAUAAAAAAAAABLAAAAgAQAAAAAAABDQAAC4
+					AQAAAAAAAA==
+					</data>
+					<key>IsSHSprite</key>
+					<true/>
+					<key>PhysicProperties</key>
+					<dict>
+						<key>AngularDamping</key>
+						<real>0.0</real>
+						<key>AngularVelocity</key>
+						<real>0.0</real>
+						<key>CanSleep</key>
+						<true/>
+						<key>FixedRot</key>
+						<false/>
+						<key>GravityScale</key>
+						<real>1</real>
+						<key>HandledBySH</key>
+						<true/>
+						<key>IsBullet</key>
+						<false/>
+						<key>LinearDamping</key>
+						<real>0.0</real>
+						<key>LinearVelocity</key>
+						<string>{0, 0}</string>
+						<key>SH_ComplexShapes</key>
+						<array/>
+						<key>Type</key>
+						<integer>3</integer>
+					</dict>
+					<key>SHSheetName</key>
+					<string>UntitledSheet</string>
+					<key>SHSpriteName</key>
+					<string>buble-4-strong</string>
+					<key>SheetImage</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>SheetImage-HD</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>TextureProperties</key>
+					<dict>
+						<key>Angle</key>
+						<integer>0</integer>
+						<key>Border</key>
+						<integer>0</integer>
+						<key>CanBeTrimmed</key>
+						<true/>
+						<key>Color</key>
+						<string>{{1, 1}, {1, 1}}</string>
+						<key>ConvertedFromOldFormat</key>
+						<false/>
+						<key>CustomClassName</key>
+						<string></string>
+						<key>FlipX</key>
+						<false/>
+						<key>FlipY</key>
+						<false/>
+						<key>Frame</key>
+						<string>{{76, 36}, {17, 16}}</string>
+						<key>Frame-HD</key>
+						<string>{{76, 36}, {17, 16}}</string>
+						<key>Image</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>Image-HD</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>IsCropped</key>
+						<false/>
+						<key>IsDrawable</key>
+						<true/>
+						<key>IsRotated</key>
+						<false/>
+						<key>IsTrimmed</key>
+						<false/>
+						<key>Name</key>
+						<string>buble-4-strong</string>
+						<key>Opacity</key>
+						<real>1</real>
+						<key>OriginalImage</key>
+						<string>/Users/Stiven/Desktop/buble-4-strong.png</string>
+						<key>OriginalImage_RelativePath</key>
+						<string>../../buble-4-strong.png/</string>
+						<key>OriginalRect</key>
+						<string>{{0, 0}, {17, 16}}</string>
+						<key>OriginalSize</key>
+						<string>{17, 16}</string>
+						<key>Position</key>
+						<string>{76, 36}</string>
 						<key>Scale</key>
 						<string>{1, 1}</string>
 						<key>SpriteSize</key>
@@ -567,8 +963,8 @@
 				<dict>
 					<key>DocumentSecurityImageBookmark</key>
 					<data>
-					Ym9va9gCAAAAAAQQMAAAAGHzHGneimdnDiG8
-					DVuUG+NaMXchbDmwVXPsnYXu6bQwvAEAAAUA
+					Ym9va9gCAAAAAAQQMAAAAHwzALQVfyRZch6l
+					FrCj3GT7SkuP+gEDKOoDXv7ea0S7vAEAAAUA
 					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
 					bgAABwAAAAEBAABEZXNrdG9wAAsAAAABAQAA
 					YnVibGUtNS5wbmcAEAAAAAEGAAAEAAAAFAAA
@@ -649,9 +1045,9 @@
 						<key>FlipY</key>
 						<false/>
 						<key>Frame</key>
-						<string>{{24, 44}, {12, 12}}</string>
+						<string>{{112, 16}, {12, 12}}</string>
 						<key>Frame-HD</key>
-						<string>{{24, 44}, {12, 12}}</string>
+						<string>{{112, 16}, {12, 12}}</string>
 						<key>Image</key>
 						<string>Bubbles_UntitledSheet.png</string>
 						<key>Image-HD</key>
@@ -677,7 +1073,139 @@
 						<key>OriginalSize</key>
 						<string>{12, 12}</string>
 						<key>Position</key>
-						<string>{24, 44}</string>
+						<string>{112, 16}</string>
+						<key>Scale</key>
+						<string>{1, 1}</string>
+						<key>SpriteSize</key>
+						<string>{12, 12}</string>
+						<key>SpriteWasBreaked</key>
+						<false/>
+						<key>Tag</key>
+						<integer>0</integer>
+						<key>TextureOffset</key>
+						<string>{0, 0}</string>
+						<key>UsesBatchRendering</key>
+						<true/>
+						<key>ZOrder</key>
+						<integer>0</integer>
+					</dict>
+				</dict>
+				<key>buble-5-strong</key>
+				<dict>
+					<key>DocumentSecurityImageBookmark</key>
+					<data>
+					Ym9va+ACAAAAAAQQMAAAAJ928abgsmiMAl7A
+					tNBg+xiY72cyqI/TlF9PgGsqJlpJxAEAAAUA
+					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
+					bgAABwAAAAEBAABEZXNrdG9wABIAAAABAQAA
+					YnVibGUtNS1zdHJvbmcucG5nAAAQAAAAAQYA
+					AAQAAAAUAAAAJAAAADQAAAAIAAAABAMAACnA
+					AAAAAAAACAAAAAQDAABJ9gUAAAAAAAgAAAAE
+					AwAA3fYFAAAAAAAIAAAABAMAAA1GoQEAAAAA
+					EAAAAAEGAABoAAAAeAAAAIgAAACYAAAACAAA
+					AAAEAABBtsg3PgAAABgAAAABAgAAAQAAAAAA
+					AAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAE
+					AAAAAwMAAAMAAAAEAAAAAwMAAAEAAAAIAAAA
+					BAMAAAIAAAAAAAAABAAAAAMDAAD1AQAADAAA
+					AAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAAAg
+					iD06AAAACAAAAAAEAABBtWww4AAAACQAAAAB
+					AQAAN0Q3RThFMjgtMERCRi0zQzAyLUJCN0Yt
+					RjZENUJGMjMwRTQzGAAAAAECAACBAAAAAQAI
+					AO8/AAABAAgAAAAAAAAAAAABAAAAAQEAAC8A
+					AAAEAAAAAwMAAAAIACjkAAAA/v///wEAAAAA
+					AAAAEgAAAAQQAABQAAAAAAAAAAUQAACoAAAA
+					AAAAABAQAADQAAAAAAAAAEAQAADAAAAAAAAA
+					AFQQAAD4AAAAAAAAAFUQAAAEAQAAAAAAAFYQ
+					AADwAAAAAAAAAAIgAACsAQAAAAAAABAgAAAs
+					AQAAAAAAABEgAABgAQAAAAAAABIgAABAAQAA
+					AAAAABMgAABQAQAAAAAAACAgAACMAQAAAAAA
+					ADAgAADwAAAAAAAAAAHAAAAQAQAAAAAAABHA
+					AAAUAAAAAAAAABLAAAAgAQAAAAAAABDQAAC4
+					AQAAAAAAAA==
+					</data>
+					<key>IsSHSprite</key>
+					<true/>
+					<key>PhysicProperties</key>
+					<dict>
+						<key>AngularDamping</key>
+						<real>0.0</real>
+						<key>AngularVelocity</key>
+						<real>0.0</real>
+						<key>CanSleep</key>
+						<true/>
+						<key>FixedRot</key>
+						<false/>
+						<key>GravityScale</key>
+						<real>1</real>
+						<key>HandledBySH</key>
+						<true/>
+						<key>IsBullet</key>
+						<false/>
+						<key>LinearDamping</key>
+						<real>0.0</real>
+						<key>LinearVelocity</key>
+						<string>{0, 0}</string>
+						<key>SH_ComplexShapes</key>
+						<array/>
+						<key>Type</key>
+						<integer>3</integer>
+					</dict>
+					<key>SHSheetName</key>
+					<string>UntitledSheet</string>
+					<key>SHSpriteName</key>
+					<string>buble-5-strong</string>
+					<key>SheetImage</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>SheetImage-HD</key>
+					<string>Bubbles_UntitledSheet.png</string>
+					<key>TextureProperties</key>
+					<dict>
+						<key>Angle</key>
+						<integer>0</integer>
+						<key>Border</key>
+						<integer>0</integer>
+						<key>CanBeTrimmed</key>
+						<true/>
+						<key>Color</key>
+						<string>{{1, 1}, {1, 1}}</string>
+						<key>ConvertedFromOldFormat</key>
+						<false/>
+						<key>CustomClassName</key>
+						<string></string>
+						<key>FlipX</key>
+						<false/>
+						<key>FlipY</key>
+						<false/>
+						<key>Frame</key>
+						<string>{{112, 0}, {12, 12}}</string>
+						<key>Frame-HD</key>
+						<string>{{112, 0}, {12, 12}}</string>
+						<key>Image</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>Image-HD</key>
+						<string>Bubbles_UntitledSheet.png</string>
+						<key>IsCropped</key>
+						<false/>
+						<key>IsDrawable</key>
+						<true/>
+						<key>IsRotated</key>
+						<false/>
+						<key>IsTrimmed</key>
+						<false/>
+						<key>Name</key>
+						<string>buble-5-strong</string>
+						<key>Opacity</key>
+						<real>1</real>
+						<key>OriginalImage</key>
+						<string>/Users/Stiven/Desktop/buble-5-strong.png</string>
+						<key>OriginalImage_RelativePath</key>
+						<string>../../buble-5-strong.png/</string>
+						<key>OriginalRect</key>
+						<string>{{0, 0}, {12, 12}}</string>
+						<key>OriginalSize</key>
+						<string>{12, 12}</string>
+						<key>Position</key>
+						<string>{112, 0}</string>
 						<key>Scale</key>
 						<string>{1, 1}</string>
 						<key>SpriteSize</key>
@@ -698,8 +1226,8 @@
 				<dict>
 					<key>DocumentSecurityImageBookmark</key>
 					<data>
-					Ym9va9gCAAAAAAQQMAAAANfNX0jGblXdErOP
-					Q1k9HP1KTcos88qh6Fh8HM9CFMpmvAEAAAUA
+					Ym9va9gCAAAAAAQQMAAAANOE/7OYPAREZSIG
+					sF10N4EPFePsJIKM1Y5mBKeUkQoyvAEAAAUA
 					AAABAQAAVXNlcnMAAAAGAAAAAQEAAFN0aXZl
 					bgAABwAAAAEBAABEZXNrdG9wAAsAAAABAQAA
 					YnVibGUtNi5wbmcAEAAAAAEGAAAEAAAAFAAA
@@ -780,9 +1308,9 @@
 						<key>FlipY</key>
 						<false/>
 						<key>Frame</key>
-						<string>{{76, 36}, {11, 10}}</string>
+						<string>{{48, 64}, {11, 10}}</string>
 						<key>Frame-HD</key>
-						<string>{{76, 36}, {11, 10}}</string>
+						<string>{{48, 64}, {11, 10}}</string>
 						<key>Image</key>
 						<string>Bubbles_UntitledSheet.png</string>
 						<key>Image-HD</key>
@@ -808,7 +1336,7 @@
 						<key>OriginalSize</key>
 						<string>{11, 10}</string>
 						<key>Position</key>
-						<string>{76, 36}</string>
+						<string>{48, 64}</string>
 						<key>Scale</key>
 						<string>{1, 1}</string>
 						<key>SpriteSize</key>
@@ -827,7 +1355,7 @@
 				</dict>
 			</dict>
 			<key>Size</key>
-			<string>{128, 64}</string>
+			<string>{128, 128}</string>
 			<key>Trim</key>
 			<false/>
 			<key>ZOrder</key>
