@@ -236,3 +236,34 @@ function getSpriteSheetDataChar()
 	}
 	return options
 end
+
+function getSpriteSheetDataButtons()
+
+	local options = {
+		-- array of tables representing each frame (required)
+		frames = {
+
+			--FRAME "button_over":
+			{
+				x = 0,
+				y = 0,
+				width = 134,
+				height = 133
+
+			},
+
+			--FRAME "button":
+			{
+				x = 0,
+				y = 140,
+				width = 134,
+				height = 133
+
+			}
+
+		},
+		sheetContentWidth = 136,
+		sheetContentHeight = 276
+	}
+	return options
+end

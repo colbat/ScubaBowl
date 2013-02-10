@@ -37,7 +37,6 @@ localGroup:insert(fishGroup)
 local layer1 = display.newImage(localGroup, "graphics/level-1.png", true)
 layer1.x = middlex
 layer1.y = middley
-local sheets = require("sheets")
 local bubblesSheet = graphics.newImageSheet( "graphics/Bubbles_UntitledSheet.png", sheets.getSpriteSheetDataBubbles() )
 local gameObjectsSheet = graphics.newImageSheet( "graphics/GameObjects_UntitledSheet.png", sheets.getSpriteSheetDataGameObjects() )
 local FishSheet = graphics.newImageSheet( "graphics/Fish_Fish.png", sheets.getSpriteSheetDataFish() )
@@ -465,6 +464,13 @@ function gameOver()
 	print("GAME OVER")
 	Runtime:removeEventListener("enterFrame", checkBall)
 	Runtime:removeEventListener("enterFrame", checkForCollsion)
+	
+	local function pressButton(event)
+		if event.phase == "release" then
+			return true
+		end
+	end
+	local newButton = myWidget.createButton("circle", "TEXT", pressButton)
 end
 
 local function layerMovement (event)
