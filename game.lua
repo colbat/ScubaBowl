@@ -8,12 +8,70 @@ physics.start()
 
 print("Level: "..level)
 
+local background = display.newImage(localGroup, "graphics/background.jpg", true)
+background.x = middlex
+background.y = middley
+local layer1 = display.newImage(localGroup, "graphics/level-1.png", true)
+layer1.x = middlex
+layer1.y = middley
+local bubbleSheet = require("Bubbles_UntitledSheet")
+local bubblesSheet = graphics.newImageSheet( "graphics/Bubbles_UntitledSheet.png", bubbleSheet.getSpriteSheetData() )
+
+local bubbles = {}
+local bubblesGroup = display.newGroup()
+localGroup:insert(bubblesGroup)
+local function makeBubbles()
+	for i = 1, 1 do
+		local index = #bubbles+1
+		bubbles[index] = display.newImage( bubblesSheet, math.random(1,6), true)
+		bubblesGroup:insert(bubbles[index])
+		bubbles[index].x = math.random(originx, originx+pixelwidth)
+		bubbles[index].y = originy+pixelheight+10
+		local function removeBubble()
+			display.remove(bubbles[index])
+			bubbles[index] = nil
+		end
+		transition.to(bubbles[index], {time=math.random(2000,10000), y = originy-100, onComplete = removeBubble})
+	end
+end
+timerStash.creatBubbles = timer.performWithDelay(1, makeBubbles, -1)
+		
+		
+
+--[[local bubbles = {}
+bubbles[1] = display.newImage(localGroup, "graphics/bubles.png", true)
+bubbles[1].x = middlex-10
+bubbles[1].y = middley
+bubbles[2] = display.newImage(localGroup, "graphics/bubles.png", true)
+bubbles[2].x = middlex-10
+bubbles[2].y = bubbles[1].y+bubbles[1].contentHeight
+
+local moveBubbles
+function moveBubbles()
+	bubbles[1].y = middley
+	bubbles[2].y = bubbles[1].y+bubbles[1].contentHeight
+	transitionStash.moveBubbles1 = transition.to(bubbles[1], {time = 10000, y = bubbles[1].y-bubbles[1].contentHeight, onComplete = moveBubbles})
+	transitionStash.moveBubbles2 = transition.to(bubbles[2], {time = 10000, y = bubbles[2].y-bubbles[1].contentHeight})
+end
+moveBubbles()
+local moveBubblesSide
+function moveBubblesSide()
+	local function moveBubblesSide2()
+		transitionStash.moveBubbles1 = transition.to(bubbles[1], {time = 1000, x = bubbles[1].x - 20, onComplete = moveBubblesSide, transition=easing.inOutQuad})
+		transitionStash.moveBubbles2 = transition.to(bubbles[2], {time = 1000, x = bubbles[1].x - 20, transition=easing.inOutQuad})
+	end
+	transitionStash.moveBubbles1 = transition.to(bubbles[1], {time = 1000, x = bubbles[1].x + 20, onComplete = moveBubblesSide2, transition=easing.inOutQuad})
+	transitionStash.moveBubbles2 = transition.to(bubbles[2], {time = 1000, x = bubbles[1].x + 20, transition=easing.inOutQuad})
+end
+moveBubblesSide()]]
 local touchBall
 local gameOver
 local touchScreen
 local ball = {}
 local numOfBalls = 2
 local currentBall
+local pinsKnockedDown = 0
+local onLocalCollision
 for i = 1, numOfBalls do
 ball[i] = display.newCircle(localGroup, 0,0, 30 )
 ball[i].x = originx + 25 + 25*i
@@ -30,17 +88,19 @@ end
 
 local function initNewBall()
 	for i = numOfBalls, 1, -1 do
-		print(i..". ball[i].released "..tostring(ball[i].released))
+		--print(i..". ball[i].released "..tostring(ball[i].released))
 		if ball[i].released == false then
 			currentBall = i
 		end
 	end
-	print("currentBall: "..currentBall)
-	physics.addBody(ball[currentBall], "kinematic", {radius = 30, friction = 10, bounce = 0.1})
+	--print("currentBall: "..currentBall)
+	physics.addBody(ball[currentBall], "kinematic", {radius = 30, friction = 100, bounce = 0.05, density = 7})
 	ball[currentBall].startX = originx + 200
 	ball[currentBall].startY = originy + pixelheight - 200
 	local function makeBallReady()
 		touchScreen:addEventListener("touch", touchBall)
+		ball[currentBall].collision = onLocalCollision
+		ball[currentBall]:addEventListener( "collision", ball[currentBall] )
 		ball[currentBall].ready = true
 	end
 	transitionStash.initBallTrans = transition.to(ball[currentBall], {time = 1000, x = ball[currentBall].startX, y = ball[currentBall].startY, onComplete = makeBallReady})
@@ -117,7 +177,7 @@ function touchBall(event)
 		ball[currentBall].prevY = ball[currentBall].y
 	elseif event.phase == "ended" or event.phase == "cancelled" then
 		ball[currentBall].bodyType = "dynamic"
-		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)/200, (ball[currentBall].startY-ball[currentBall].y)/200, ball[currentBall].x, ball[currentBall].y )
+		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*2, (ball[currentBall].startY-ball[currentBall].y)*2, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
@@ -134,24 +194,46 @@ end
 local pin1 = display.newRect(localGroup, 0, 0, 20, 50)
 pin1.x = 502
 pin1.y = 600
-physics.addBody(pin1, "dynamic")
+pin1.isDown = false
+physics.addBody(pin1, "dynamic", {density = 0.5, friction = 0.05})
 pin1.myName = "pin1"
+pin1:setFillColor(0,255,0)
 local pin2 = display.newRect(localGroup, 0, 0, 20, 50)
 pin2.x = 967
 pin2.y = 600
-physics.addBody(pin2, "dynamic")
+pin2.isDown = false
+pin2:setFillColor(0,255,0)
+physics.addBody(pin2, "dynamic", {density = 0.5, friction = 0.05})
 pin2.myName = "pin2"
 local pin3 = display.newRect(localGroup, 0, 0, 20, 50)
 pin3.x = 568
 pin3.y = 600
-physics.addBody(pin3, "dynamic")
+pin3.isDown = false
+pin3:setFillColor(0,255,0)
+physics.addBody(pin3, "dynamic", {density = 0.5, friction = 0.05})
 pin3.myName = "pin3"
 
-local function onLocalCollision( self, event )
+function onLocalCollision( self, event )
         if ( event.phase == "began" ) then
  
-                --print( self.myName .. ": collision began with " .. event.other.myName )
- 
+                if event.other.myName then
+					if event.other.myName == "pin1" then
+						if pin1.isDown == false then
+ 							pin1.isDown = true
+							pin1:setFillColor(255,0,0)
+						end
+					elseif event.other.myName == "pin2" then
+						if pin2.isDown == false then
+	 						pin2.isDown = true
+							pin2:setFillColor(255,0,0)
+						end
+					elseif event.other.myName == "pin3" then
+						if pin3.isDown == false then
+	 						pin3.isDown = true
+							pin3:setFillColor(255,0,0)
+						end
+					end
+				end
         elseif ( event.phase == "ended" ) then
  
                 --print( self.myName .. ": collision ended with " .. event.other.myName )
@@ -159,12 +241,11 @@ local function onLocalCollision( self, event )
         end
 end
  
-ball[currentBall].collision = onLocalCollision
-ball[currentBall]:addEventListener( "collision", ball[currentBall] )
+
 
 
 local function onLocalPreCollision( self, event )
-	if event.other.myName and event.other.myName == "ball[currentBall]" then
+	if event.other.myName and event.other.myName == "ball" then
 		print(self.myName.." with ball[currentBall] Force: "..event.force)
 	end
 end
@@ -184,6 +265,7 @@ local function checkBall(event)
 
 		if try == 30 then
 		print("Remove Ball")
+		ball[currentBall]:removeEventListener( "collision", ball[currentBall] )
 		ball[currentBall].stopped = true
 		local oldBall = currentBall
 		local function removeBallDelay()
