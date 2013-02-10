@@ -148,6 +148,8 @@ local pinsKnockedDown = 0
 local onLocalCollision
 
 
+local gameObjectsGroup = display.newGroup()
+localGroup:insert(gameObjectsGroup)
 local followingBubblesGroup = display.newGroup()
 localGroup:insert(followingBubblesGroup)
 
@@ -408,6 +410,10 @@ pin3.isDown = false
 --pin3:setFillColor(0,255,0)
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
 pin3.myName = "pin3"
+gameObjectsGroup:insert(pin1)
+gameObjectsGroup:insert(pin2)
+gameObjectsGroup:insert(pin3)
+
 
 local myAreaTipsWidth = pixelwidth / 2
 local myAreaTipsHeight = pixelheight / 2
@@ -540,16 +546,45 @@ Runtime:addEventListener( "enterFrame", displayBubbleTips )
 
 function gameOver()
 	--physics.stop()
+	local gameOverGroup = display.newGroup()
+	localGroup:insert(gameOverGroup)
 	print("GAME OVER")
 	Runtime:removeEventListener("enterFrame", checkBall)
 	Runtime:removeEventListener("enterFrame", checkForCollsion)
+	
+	local gameOverDimBtm = display.newRect( gameOverGroup, originx, originy, pixelwidth, pixelheight )
+	gameOverDimBtm:setFillColor(0)
+	gameOverDimBtm.alpha = 0.44
+	local gameOverDimTop = display.newRect( gameOverGroup, 0, originy, 610, pixelheight )
+	gameOverDimTop.x = middlex
+	gameOverDimTop:setFillColor(0)
+	gameOverDimTop.alpha = 0.44
 	
 	local function pressButton(event)
 		if event.phase == "release" then
 			return true
 		end
 	end
-	local newButton = myWidget.createButton("circle", "TEXT", pressButton)
+	
+	local menuBtn = myWidget.createButton("circle", "MENU", pressButton)
+	menuBtn.x = 260
+	menuBtn.y = 440
+	gameOverGroup:insert(menuBtn)
+	
+	local replayBtn = myWidget.createButton("circle", "REPLAY", pressButton)
+	replayBtn.x = 410
+	replayBtn.y = 440
+	gameOverGroup:insert(replayBtn)
+	
+	local nextBtn = myWidget.createButton("circle", "NEXT", pressButton)
+	nextBtn.x = 560
+	nextBtn.y = 440
+	gameOverGroup:insert(nextBtn)
+	
+	local learnBtn = myWidget.createButton("circle", "LEARN", pressButton)
+	learnBtn.x = 710
+	learnBtn.y = 440
+	gameOverGroup:insert(learnBtn)
 end
 
 function layerMovement (event)

@@ -32,7 +32,7 @@ layer1.x = middlex
 layer1.y = middley
 
 menuGroup = display.newGroup()
-
+localGroup:insert(menuGroup)
 local spaceBetweenButton = 10
 
 -- Start Game Button

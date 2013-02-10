@@ -1,6 +1,6 @@
 module( ..., package.seeall )
 
---======== ============================================================--
+--====================================================================--
 -- DIRECTOR CLASS
 --====================================================================--
 
@@ -63,8 +63,8 @@ showDebug = true
 -- CONTENT INFO
 --====================================================================--
 
-local _W = math.round(display.pixelWidth*display.contentScaleX)
-local _H = math.round(display.pixelHeight*display.contentScaleY)
+local _W = math.round(display.pixelHeight*display.contentScaleX)
+local _H = math.round(display.pixelWidth*display.contentScaleY)
 
 --====================================================================--
 -- DISPLAY GROUPS
@@ -103,7 +103,6 @@ local isBook = false
 local bookPages = {}
 local currBookPage = 1
 local moveBookPage
-
 --
 prevView.x = -_W
 prevView.y = 0
@@ -118,13 +117,13 @@ popupView.y = 0
 -- GET COLOR
 --====================================================================--
 
-local getColor = function( strValue1, strValue2, strValue3, strValue4 )
+local getColor = function( strValue1, strValue2, strValue3 )
 	
 	------------------
 	-- Variables
 	------------------
 	
-	local r, g, b, a
+	local r, g, b
 	
 	------------------
 	-- Test Parameters
@@ -174,15 +173,11 @@ local getColor = function( strValue1, strValue2, strValue3, strValue4 )
 		b = 0
 	end
 	
-	if strValue4 then
-		a = strValue4
-	else a = 255 end
-	
 	------------------
 	-- Return
 	------------------
 	
-	return r, g, b, a
+	return r, g, b
 	
 end
 
@@ -193,7 +188,6 @@ end
 local showError = function( errorMessage, debugMessage )
 	local message = "Director ERROR: " .. tostring( errorMessage )
 	local function onComplete( event )
-		local alert = native.showAlert( message, debugMessage, { "OK" } )
 		print()
 		print( "-----------------------" )
 		print( message )
@@ -701,7 +695,7 @@ local loadScene = function( moduleName, target, params )
 		-- Unload Scene
 		------------------
 		
-		if prevScene ~= currScene and prevScene ~= nextScene then
+		if prevScene ~= currScene --[[and prevScene ~= nextScene]] then
 			unloadScene( moduleName )
 		end
 		
@@ -927,9 +921,9 @@ local fxEnded = function( event )
 	-- Unload scene
 	------------------
 	
-	--if currScene ~= nextScene then
+	if currScene ~= nextScene then
 		unloadScene( currScene )
-	--end
+	end
 	
 	------------------
 	-- Next -> Current
@@ -974,8 +968,7 @@ function director:changeScene( params,
 							   effect,
 							   arg1,
 							   arg2,
-							   arg3,
-							   arg4 )
+							   arg3 )
 	
 	------------------
 	-- If is changing scene, return without do anything
@@ -1000,7 +993,6 @@ function director:changeScene( params,
 	------------------
 	
 	if type( params ) ~= "table" then
-		arg4 = arg3
 		arg3 = arg2
 		arg2 = arg1
 		arg1 = effect
@@ -1075,9 +1067,6 @@ function director:changeScene( params,
 	-- Load Scene
 	------------------
 	
-	cancelAllTimers()
-	cancelAllTransitions()
-	cancelAllSounds()
 	loadNextScene( newScene, params )
 	
 	------------------
@@ -1223,19 +1212,17 @@ function director:changeScene( params,
 	
 	elseif effect == "fade" then
 		
-		nextView.x = _W*2
-		nextView.y = _H*2
+		nextView.x = _W
+		nextView.y = 0
 		--
 		local fade = display.newRect( -_W, -_H, _W * 3, _H * 3 )
 		fade.alpha = 0
-		fade:setFillColor( getColor( arg1, arg2, arg3, arg4 ) )
+		fade:setFillColor( getColor( arg1, arg2, arg3 ) )
 		effectView:insert( fade )
 		--
 		local function returnFade( event )
 			currView.x = _W*2
-			currView.y = _H*2
 			nextView.x = 0
-			nextView.y = 0
 			--
 			local function removeFade( event )
 				fade:removeSelf()
