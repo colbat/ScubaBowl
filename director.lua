@@ -1215,7 +1215,7 @@ function director:changeScene( params,
 	
 	elseif effect == "fade" then
 		
-		nextView.x = _W
+		nextView.x = _W*2
 		nextView.y = 0
 		--
 		local fade = display.newRect( -_W, -_H, _W * 3, _H * 3 )

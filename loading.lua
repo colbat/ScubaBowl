@@ -5,8 +5,24 @@ updateMem()
 local localGroup = display.newGroup()
 
 
+local loadingImage
+if system.getInfo("model") == "iPhone" then
+	if display.pixelHeight > 960 then
+		loadingImage = display.newImage("Default-568h@2x.png", true)
+	end
+elseif system.getInfo("model") == "iPad" then
+	loadingImage = display.newImage("Default-Landscape.png", true)
+end
+
+if loadingImage == nil then
+	loadingImage = display.newImage("Default.png", true)
+end
+localGroup:insert(loadingImage)
+loadingImage.rotation = -90
 
 
+loadingImage.x = middlex
+loadingImage.y = middley
 
 
 _G.sheets = require("sheets")
