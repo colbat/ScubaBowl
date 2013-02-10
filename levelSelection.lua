@@ -35,17 +35,35 @@ backText:addEventListener("touch", back)
 lvlButtons = {}
 
 for i = 1, 3 do
-	lvlButtons[i] = display.newImage("graphics/level1Button.png")
+	lvlButtons[i] = display.newImage("graphics/button.png")
+	lvlButtons[i].xScale = 1.8
+	lvlButtons[i].yScale = 1.8
+	lvlButtons[i].stars = {}
 	lvlButtons[i].level = i
-	lvlButtons[i].lvlText = display.newText("Level " .. i, 0, 0, "Wasser", 20)
+	lvlButtons[i].lvlText = display.newText("Level " .. i, 0, 0, "Wasser", 25)
 	lvlButtons[i].lvlText:setTextColor(0, 0, 0)
 
 	if levelData["lvl"..i]["stars"] == "locked" then
 		lvlButtons[i].lvlTextLocked = display.newText("(Locked)", 0, 0, "Wasser", 15)
 		lvlButtons[i].lvlTextLocked:setTextColor(0, 0, 0)
 	else
-		lvlButtons[i]:addEventListener("touch", startGame)
+		-- Add not filled stars under the level text
+		for j = 1, 3 do
+			lvlButtons[i].stars[j] = display.newImage("graphics/star.png")
+			lvlButtons[i].stars[j].xScale = 0.15
+			lvlButtons[i].stars[j].yScale = 0.15
+			lvlButtons[i].stars[j].alpha = 0.3
+		end
 
+		-- Filled stars depending on the score
+		for k = 1, levelData["lvl"..i]["stars"] do
+			lvlButtons[i].stars[k].image = "graphics/star.png"
+			lvlButtons[i].stars[k].xScale = 0.15
+			lvlButtons[i].stars[k].yScale = 0.15
+			lvlButtons[i].stars[k].alpha = 1
+		end
+
+		lvlButtons[i]:addEventListener("touch", startGame)
 	end
 	
 	localGroup:insert(lvlButtons[i])
@@ -65,6 +83,18 @@ for i = 1, 3 do
 	if levelData["lvl"..i]["stars"] == "locked" then
 		lvlButtons[i].lvlTextLocked.x = lvlButtons[i].x
 		lvlButtons[i].lvlTextLocked.y = lvlButtons[i].y + 25
+	end
+
+	-- Stars if unlocked
+	if levelData["lvl"..i]["stars"] ~= "locked" then
+		lvlButtons[i].stars[1].x = lvlButtons[i].x - 10
+		lvlButtons[i].stars[1].y = lvlButtons[i].y + 30
+
+		lvlButtons[i].stars[2].x = lvlButtons[i].x + 15
+		lvlButtons[i].stars[2].y = lvlButtons[i].y + 30
+
+		lvlButtons[i].stars[3].x = lvlButtons[i].x + 40
+		lvlButtons[i].stars[3].y = lvlButtons[i].y + 30
 	end
 end 
 
