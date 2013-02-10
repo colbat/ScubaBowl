@@ -144,9 +144,10 @@ local touchScreen
 local ball = {}
 local numOfBalls = 2
 local currentBall
-local pinsKnockedDown = 0
 local onLocalCollision
-
+local pinsKnockedDown = 0
+local ballsUsed = 0
+local ballsLeft = numOfBalls
 
 local gameObjectsGroup = display.newGroup()
 localGroup:insert(gameObjectsGroup)
@@ -219,6 +220,8 @@ local function initNewBall()
 		ball[currentBall].collision = onLocalCollision
 		ball[currentBall]:addEventListener( "collision", ball[currentBall] )
 		ball[currentBall].ready = true
+		ballsUsed = ballsUsed +1
+		ballsLeft = ballsLeft -1
 	end
 	transitionStash.initBallTrans = transition.to(ball[currentBall], {time = 1000, x = ball[currentBall].startingX, y = ball[currentBall].startingY, onComplete = makeBallReady})
 	transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = ball[currentBall].startingX, y = ball[currentBall].startingY})
@@ -296,7 +299,7 @@ local function gamePause(event)
 end
 
 
-touchScreen = display.newRect(localGroup, originx + 50, originy, pixelwidth, pixelheight)
+touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
 
@@ -428,30 +431,27 @@ myAreaTips.alpha = false
 
 function checkForCollsion()
 	if pin1.isDown == false then
-		if ball[currentBall].x and ball[currentBall].x then
-			if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
-				print("Pin1 Down")
-				pin1:setFillColor(255,0,0)
-				pin1.isDown = true
-			end
+		if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
+			print("Pin1 Down")
+			pin1:setFillColor(255,0,0)
+			pin1.isDown = true
+			pinsKnockedDown = pinsKnockedDown +1
 		end
 	end
 	if pin2.isDown == false then
-		if ball[currentBall].x and ball[currentBall].x then
-			if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
-				print("Pin2 Down")
-				pin2:setFillColor(255,0,0)
-				pin2.isDown = true
-			end
+		if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
+			print("Pin2 Down")
+			pin2:setFillColor(255,0,0)
+			pin2.isDown = true
+			pinsKnockedDown = pinsKnockedDown +1
 		end
 	end
 	if pin3.isDown == false then
-		if ball[currentBall].x and ball[currentBall].x then
-			if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
-				print("Pin3 Down")
-				pin3:setFillColor(255,0,0)
-				pin3.isDown = true
-			end
+		if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
+			print("Pin3 Down")
+			pin3:setFillColor(255,0,0)
+			pin3.isDown = true
+			pinsKnockedDown = pinsKnockedDown +1
 		end
 	end
 	if pin1.isDown == true and pin2.isDown == true and pin3.isDown == true then
@@ -549,9 +549,9 @@ function gameOver()
 	local gameOverGroup = display.newGroup()
 	localGroup:insert(gameOverGroup)
 	print("GAME OVER")
-	Runtime:removeEventListener("enterFrame", checkBall)
-	Runtime:removeEventListener("enterFrame", checkForCollsion)
-	
+	--Runtime:removeEventListener("enterFrame", checkBall)
+	--Runtime:removeEventListener("enterFrame", checkForCollsion)
+	deleteListeners()
 	local gameOverDimBtm = display.newRect( gameOverGroup, originx, originy, pixelwidth, pixelheight )
 	gameOverDimBtm:setFillColor(0)
 	gameOverDimBtm.alpha = 0.44
@@ -560,31 +560,96 @@ function gameOver()
 	gameOverDimTop:setFillColor(0)
 	gameOverDimTop.alpha = 0.44
 	
-	local function pressButton(event)
+	
+	local gameOverStars = {}
+	local howManyStars = pinsKnockedDown
+	if ballsLeft == 0 then
+		howManyStars = howManyStars-1
+	end
+	for i = 1, 3 do
+		gameOverStars[i] = display.newImage( gameOverGroup, "graphics/star-1.png", 0, 0, true)
+		if howManyStars < i then
+			gameOverStars[i].alpha = 0.5
+		end
+		gameOverStars[i].y = 190
+		gameOverStars[i].x = 310 + (i-1)*170
+	end
+	
+	local progressText = display.newText(gameOverGroup, ".", 0, 0, "Wasser", 36)
+	if howManyStars > 0 then
+		progressText.text = "Level Cleared!"
+	else progressText.text = "Level Failed!"
+	end
+	progressText.x = 480
+	progressText.y = 74
+	
+	local score
+	score = pinsKnockedDown*10000 + ballsLeft*7500
+	local scoreText = display.newText(gameOverGroup, "Score: "..score, 0, 0, "Wasser", 36)
+	scoreText.x = 480
+	scoreText.y = 328
+	
+	local function pressMenuBtn(event)
+		if event.phase == "release" then
+			director:changeScene("mainMenu", "fade")
+			return true
+		end
+	end
+	
+	local menuBtn = myWidget.createButton("circle", "MENU", pressMenuBtn)
+	menuBtn.x = 260
+	menuBtn.y = 440
+	gameOverGroup:insert(menuBtn)
+	
+	local function pressReplayBtn(event)
+		if event.phase == "release" then
+			director:changeScene("game", "fade")
+			return true
+		end
+	end
+	
+	local replayBtn = myWidget.createButton("circle", "REPLAY", pressReplayBtn)
+	replayBtn.x = 410
+	replayBtn.y = 440
+	gameOverGroup:insert(replayBtn)
+	
+	local function pressNextBtn(event)
+		if event.phase == "release" then
+			director:changeScene("game", "fade")
+			return true
+		end
+	end
+	
+	local nextBtn = myWidget.createButton("circle", "NEXT", pressNextBtn)
+	nextBtn.x = 560
+	nextBtn.y = 440
+	gameOverGroup:insert(nextBtn)
+	if howManyStars <= 0 then
+		nextBtn.isVisible = false
+	end
+	
+	local function pressLearnBtn(event)
 		if event.phase == "release" then
 			return true
 		end
 	end
 	
-	local menuBtn = myWidget.createButton("circle", "MENU", pressButton)
-	menuBtn.x = 260
-	menuBtn.y = 440
-	gameOverGroup:insert(menuBtn)
-	
-	local replayBtn = myWidget.createButton("circle", "REPLAY", pressButton)
-	replayBtn.x = 410
-	replayBtn.y = 440
-	gameOverGroup:insert(replayBtn)
-	
-	local nextBtn = myWidget.createButton("circle", "NEXT", pressButton)
-	nextBtn.x = 560
-	nextBtn.y = 440
-	gameOverGroup:insert(nextBtn)
-	
-	local learnBtn = myWidget.createButton("circle", "LEARN", pressButton)
+	local learnBtn = myWidget.createButton("circle", "LEARN", pressLearnBtn)
 	learnBtn.x = 710
 	learnBtn.y = 440
 	gameOverGroup:insert(learnBtn)
+	
+	if tonumber(levelData["lvl"..level]["stars"]) < howManyStars then
+		levelData["lvl"..level]["stars"] = howManyStars
+	end
+	if tonumber(levelData["lvl"..level]["highscore"]) < score then
+		levelData["lvl"..level]["highscore"] = score
+	end
+	saveFile("levelData.txt", json.encode(levelData))
+	
+	gameOverGroup.alpha = 0
+	
+	transitionStash.gameOvertrans = transition.to(gameOverGroup, {time = 1000, alpha = 1, delay = 1000})
 end
 
 function layerMovement (event)

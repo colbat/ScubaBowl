@@ -1067,6 +1067,9 @@ function director:changeScene( params,
 	-- Load Scene
 	------------------
 	
+	cancelAllTimers()
+	cancelAllTransitions()
+	cancelAllSounds()
 	loadNextScene( newScene, params )
 	
 	------------------
