@@ -587,7 +587,7 @@ local function showTipPopup()
 	animation = nil
 	local options =
 	{
-	    hasBackground=false,
+	    hasBackground=true,
 	    baseUrl=system.DocumentsDirectory,
 	    urlRequest=listener
 	}
