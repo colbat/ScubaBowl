@@ -374,7 +374,10 @@ function touchBall(event)
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
 		ball[currentBall].released = true
 	
-		narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
+		if options["sounds"] == 1 then
+			narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
+		end
+		
 		char:setFrame(1)
 		transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = originx + 156, y = originy + pixelheight - 150})
 		ballTouchStarted = false
