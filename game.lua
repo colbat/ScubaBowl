@@ -14,6 +14,14 @@ local physicsData = (require "Physics").physicsData(1)
 local background = display.newImage(localGroup, "graphics/background.jpg", true)
 background.x = middlex
 background.y = middley
+
+local layer3a = display.newImage(localGroup, "graphics/level-3-light-1.png", true)
+layer3a.x = middlex
+layer3a.y = middley
+local layer3b = display.newImage(localGroup, "graphics/level-3-light-2.png", true)
+layer3b.x = middlex
+layer3b.y = middley
+layer3b.alpha = 0
 local layer2 = display.newImage(localGroup, "graphics/level-2.png", true)
 layer2.x = middlex
 layer2.y = middley
@@ -27,7 +35,16 @@ local bubblesSheet = graphics.newImageSheet( "graphics/Bubbles_UntitledSheet.png
 local gameObjectsSheet = graphics.newImageSheet( "graphics/GameObjects_UntitledSheet.png", sheets.getSpriteSheetDataGameObjects() )
 local FishSheet = graphics.newImageSheet( "graphics/Fish_Fish.png", sheets.getSpriteSheetDataFish() )
 
-
+local changeLight
+function changeLight()
+	local function changeLight2()
+		transitionStash.changeLight2a = transition.to(layer3a, {time = 1000, alpha = 1, onComplete = changeLight})
+		transitionStash.changeLight2b = transition.to(layer3b, {time = 1000, alpha = 0})
+	end
+	transitionStash.changeLight1a = transition.to(layer3a, {time = 1000, alpha = 0, onComplete = changeLight2})
+	transitionStash.changeLight1b = transition.to(layer3b, {time = 1000, alpha = 1})
+end
+changeLight()
 local bubbles = {}
 local bubblesGroup = display.newGroup()
 localGroup:insert(bubblesGroup)
@@ -65,6 +82,15 @@ local function makeFish()
 			fishes[index] = nil
 		end
 		transitionStash.fishMove[index] = transition.to(fishes[index], {time=math.random(5000,20000), x = -fishes[index].x, onComplete = removeBubble})
+
+		local rotate1
+		function rotate1()
+			local function rotate2()
+				transition.to(fishes[index], {time = 1500, rotation = -3, onComplete = rotate1, transition=easing.inOutQuad})
+			end
+			transition.to(fishes[index], {time = 1500, rotation = 3, onComplete = rotate2, transition=easing.inOutQuad})
+		end
+		rotate1()
 end
 timerStash.createFish = timer.performWithDelay(2000, makeFish, -1)
 		
@@ -183,10 +209,10 @@ function touchBall(event)
 		local xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 		local lineAngle = math.deg( math.atan( yDist/xDist ) )
 		if math.sqrt(xDist^2+yDist^2) < directionArrow.maxForce then
-			directionArrow.width = math.sqrt(xDist^2+yDist^2)
+			directionArrow.width = math.sqrt(xDist^2+yDist^2) *2
 			directionArrow.rotation = lineAngle
-			directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
-			directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
+			directionArrow.x = ball[currentBall].startX
+			directionArrow.y = ball[currentBall].startY
 		else
 			local excessDist = directionArrow.maxForce/(math.sqrt(xDist^2+yDist^2))
 			--print(excessDist)
@@ -194,10 +220,10 @@ function touchBall(event)
 			ball[currentBall].y = ball[currentBall].startY - (ball[currentBall].startY-event.y) * excessDist
 			xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 			lineAngle = math.deg( math.atan( yDist/xDist ) )
-			directionArrow.width = math.sqrt(xDist^2+yDist^2)
+			directionArrow.width = math.sqrt(xDist^2+yDist^2) *2
 			directionArrow.rotation = lineAngle
-			directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
-			directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
+			--directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
+			--directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		end
 			
 		--print(directionArrow.width)
@@ -208,7 +234,7 @@ function touchBall(event)
 		ball[currentBall].prevY = ball[currentBall].y
 	elseif event.phase == "ended" or event.phase == "cancelled" then
 		ball[currentBall].bodyType = "dynamic"
-		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*5, (ball[currentBall].startY-ball[currentBall].y)*5, ball[currentBall].x, ball[currentBall].y )
+		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*8, (ball[currentBall].startY-ball[currentBall].y)*8, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
@@ -223,9 +249,9 @@ end
 
 local pin1 = display.newImage( gameObjectsSheet, 3, true)
 pin1.x = 502
-pin1.y = 600
+pin1.y = 510
 pin1.isDown = false
-physics.addBody(pin1, "dynamic", physicsData:get("seahorse"))
+--physics.addBody(pin1, "dynamic", physicsData:get("seahorse"))
 pin1.myName = "pin1"
 --pin1:setFillColor(0,255,0)
 local pin2 = display.newImage( gameObjectsSheet, 3, true)
@@ -233,14 +259,14 @@ pin2.x = 967
 pin2.y = 600
 pin2.isDown = false
 --pin2:setFillColor(0,255,0)
-physics.addBody(pin2, "dynamic", physicsData:get("seahorse"))
+--physics.addBody(pin2, "dynamic", physicsData:get("seahorse"))
 pin2.myName = "pin2"
 local pin3 = display.newImage( gameObjectsSheet, 3, true)
 pin3.x = 568
-pin3.y = 600
+pin3.y = 200
 pin3.isDown = false
 --pin3:setFillColor(0,255,0)
-physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
+--physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
 pin3.myName = "pin3"
 
 function onLocalCollision( self, event )
