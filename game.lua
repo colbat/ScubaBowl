@@ -152,6 +152,7 @@ local function initNewBall()
 	end
 	--print("currentBall: "..currentBall)
 	physics.addBody(ball[currentBall], "kinematic", physicsData:get("ball"))
+	ball[currentBall].linearDamping = 0.5
 	ball[currentBall].startX = originx + 200
 	ball[currentBall].startY = originy + pixelheight - 200
 	local function makeBallReady()
@@ -225,7 +226,6 @@ function touchBall(event)
 			--directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
 			--directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		end
-			
 		--print(directionArrow.width)
 		directionArrow:setFillColor(0,255,0)
 		directionArrow.alpha = 0.6
@@ -234,7 +234,7 @@ function touchBall(event)
 		ball[currentBall].prevY = ball[currentBall].y
 	elseif event.phase == "ended" or event.phase == "cancelled" then
 		ball[currentBall].bodyType = "dynamic"
-		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*8, (ball[currentBall].startY-ball[currentBall].y)*8, ball[currentBall].x, ball[currentBall].y )
+		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*10, (ball[currentBall].startY-ball[currentBall].y)*10, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
@@ -269,49 +269,33 @@ pin3.isDown = false
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
 pin3.myName = "pin3"
 
-function onLocalCollision( self, event )
-        if ( event.phase == "began" ) then
- 
-                if event.other.myName then
-					if event.other.myName == "pin1" then
-						if pin1.isDown == false then
- 							pin1.isDown = true
-							pin1:setFillColor(255,0,0)
-						end
-					elseif event.other.myName == "pin2" then
-						if pin2.isDown == false then
-	 						pin2.isDown = true
-							pin2:setFillColor(255,0,0)
-						end
-					elseif event.other.myName == "pin3" then
-						if pin3.isDown == false then
-	 						pin3.isDown = true
-							pin3:setFillColor(255,0,0)
-						end
-					end
-				end
-        elseif ( event.phase == "ended" ) then
- 
-                --print( self.myName .. ": collision ended with " .. event.other.myName )
- 
-        end
-end
- 
-
-
-
-local function onLocalPreCollision( self, event )
-	if event.other.myName and event.other.myName == "ball" then
-		print(self.myName.." with ball[currentBall] Force: "..event.force)
+local function checkForCollsion()
+	if pin1.isDown == false then
+		if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
+			print("Pin1 Down")
+			pin1:setFillColor(255,0,0)
+			pin1.isDown = true
+		end
+	end
+	if pin2.isDown == false then
+		if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
+			print("Pin2 Down")
+			pin2:setFillColor(255,0,0)
+			pin2.isDown = true
+		end
+	end
+	if pin3.isDown == false then
+		if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
+			print("Pin3 Down")
+			pin3:setFillColor(255,0,0)
+			pin3.isDown = true
+		end
+	end
+	if pin1.isDown == true and pin2.isDown == true and pin3.isDown == true then
+		gameOver()
 	end
 end
-
-pin1.postCollision = onLocalPreCollision
-pin1:addEventListener( "postCollision", pin1 )
-pin2.postCollision = onLocalPreCollision
-pin2:addEventListener( "postCollision", pin2 )
-pin3.postCollision = onLocalPreCollision
-pin3:addEventListener( "postCollision", pin3 )
+Runtime:addEventListener("enterFrame", checkForCollsion)
 
 local try = 0
 local function checkBall(event)
@@ -345,11 +329,34 @@ Runtime:addEventListener("enterFrame", checkBall)
 
 
 function gameOver()
+	--physics.stop()
 	print("GAME OVER")
+	Runtime:removeEventListener("enterFrame", checkBall)
+	Runtime:removeEventListener("enterFrame", checkForCollsion)
 end
 
-local function moveBackgrounds()
+local function layerMovement (event)
+if ball[currentBall] then
+if layer2 then
+	
+	layer2.x = middlex +  ((-ball[currentBall].x+middlex)/middlex)*42
+	if layer2.x > middlex + 42 then
+		layer2.x = middlex + 42
+	elseif layer2.x < middlex - 42 then
+		layer2.x = middlex - 42
+	end
 end
+if layer1 then
+	layer1.x = middlex +  ((-ball[currentBall].x+middlex)/middlex)*102
+	if layer1.x > middlex + 102 then
+		layer1.x = middlex + 102
+	elseif layer1.x < middlex - 102 then
+		layer1.x = middlex - 102
+	end
+end
+end
+end
+Runtime:addEventListener("enterFrame", layerMovement)
 
 return localGroup
 end
