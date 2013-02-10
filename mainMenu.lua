@@ -6,13 +6,25 @@ local localGroup = display.newGroup()
 
 local selectLevel = function()
 	menuGroup:removeSelf()
-	director:changeScene("levelSelection")
+	director:changeScene("levelSelection", "fade")
 end
 
 local displayOptions = function()
 	menuGroup:removeSelf()
-	director:changeScene("option")
+	director:changeScene("option", "fade")
 end
+
+local background = display.newImage(localGroup, "graphics/background.jpg", true)
+background.x = middlex
+background.y = middley
+local layer2 = display.newImage(localGroup, "graphics/level-2.png", true)
+layer2.x = middlex
+layer2.y = middley
+local fishGroup = display.newGroup()
+localGroup:insert(fishGroup)
+local layer1 = display.newImage(localGroup, "graphics/level-1.png", true)
+layer1.x = middlex
+layer1.y = middley
 
 menuGroup = display.newGroup()
 
@@ -35,6 +47,8 @@ menuGroup:insert(optionsButton)
 -- Main Menu group settings
 menuGroup.y = 250
 menuGroup.x = display.contentCenterX
+
+localGroup:insert(menuGroup)
 
 newGameButton:addEventListener("touch", selectLevel)
 optionsButton:addEventListener("touch", displayOptions)
