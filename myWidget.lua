@@ -17,6 +17,13 @@ function createButton( type, text, listener )
 			width = 134,
 			height = 133,
 			onEvent = listener,}
+	--[[
+	elseif type == "smallCircle" then
+		button = widget.newButton{
+	    	defaultIndex = "graphics/buttonPause.png",
+	    	overIndex = "graphics/buttonPause_over.png",
+			onEvent = listener,} 
+			]]
 	end
 	group:insert(button)
 	if text ~= nil then

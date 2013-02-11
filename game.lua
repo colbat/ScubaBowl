@@ -326,11 +326,13 @@ local function pressGamePause(event)
 	end
 end
 
+
 local pauseBtn = myWidget.createButton("circle", "||", pressGamePause)
 pauseBtn.xScale, pauseBtn.yScale  = 0.5, 0.5
 pauseBtn.x = originx + 35
 pauseBtn.y = originy + 35
 localGroup:insert(pauseBtn)
+
 
 local directionArrow = display.newGroup()
 localGroup:insert(directionArrow)
