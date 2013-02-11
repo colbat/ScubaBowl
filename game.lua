@@ -311,9 +311,16 @@ pauseBtn.x = 25
 pauseBtn.y = -10
 localGroup:insert(pauseBtn)
 
-local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
-directionArrow:setFillColor(0,0,0,0)
+local directionArrow = display.newGroup()
+localGroup:insert(directionArrow)
+local mainArrow = display.newImage(directionArrow, "graphics/arrowPlus.png", 0, 0, true)
+
+local arrowHead = display.newImage(directionArrow, "graphics/arrow.png", 0, 0, true)
+arrowHead.x = mainArrow.x + mainArrow.contentWidth/2+ arrowHead.contentWidth/2
+
+directionArrow.alpha = 0
 directionArrow.maxForce = 140
+directionArrow:setReferencePoint(display.CenterReferencePoint)
 for i = 1, numOfBalls do
 	localGroup:insert(ball[i])
 end
@@ -322,7 +329,7 @@ function touchBall(event)
 	if ball[currentBall].ready == true then
 	if event.phase == "began" and event.x >= ball[currentBall].x -100 and event.x <= ball[currentBall].x +100 and event.y >= ball[currentBall].y -100 and event.y <= ball[currentBall].y +100 then
 		
-		directionArrow:setFillColor(0,255,0,255)
+		--directionArrow:setFillColor(0,255,0,255)
 		directionArrow.x = ball[currentBall].startX
 		directionArrow.y = ball[currentBall].startY
 		directionArrow.alpha = 0
@@ -333,10 +340,18 @@ function touchBall(event)
 		ball[currentBall].y = event.y
 		local xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 		local lineAngle = math.deg( math.atan( yDist/xDist ) )
-		if ( event.x < ball[currentBall].startX ) then lineAngle = lineAngle else lineAngle = lineAngle +180 end
+		--print("line angle: ".. lineAngle)
+		if ( event.x > ball[currentBall].startX ) then 
+			lineAngle = lineAngle +180
+		end
+		if lineAngle == 90 or lineAngle == -90 then
+			lineAngle = lineAngle+0.5
+		end
+		--print("line angle 2: ".. lineAngle)
 		if math.sqrt(xDist^2+yDist^2) <= directionArrow.maxForce then
-			directionArrow.width = math.sqrt(xDist^2+yDist^2) *3
+			mainArrow.width = math.sqrt(xDist^2+yDist^2) *3 - arrowHead.width
 			directionArrow.rotation = lineAngle
+			arrowHead.x = mainArrow.x + mainArrow.width/2
 		else
 			local excessDist = directionArrow.maxForce/(math.sqrt(xDist^2+yDist^2))
 			--print(excessDist)
@@ -344,28 +359,41 @@ function touchBall(event)
 			ball[currentBall].y = ball[currentBall].startY - (ball[currentBall].startY-event.y) * excessDist
 			xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 			lineAngle = math.deg( math.atan( yDist/xDist ) )
-			if ( event.x < ball[currentBall].startX ) then lineAngle = lineAngle else lineAngle = lineAngle +180 end
-			directionArrow.width = math.sqrt(xDist^2+yDist^2) *3
+
+			if ( event.x > ball[currentBall].startX ) then 
+				lineAngle = lineAngle +180
+			end
+			if lineAngle == 90 or lineAngle == -90 then
+				lineAngle = lineAngle+0.5
+			end
+			mainArrow.width = math.sqrt(xDist^2+yDist^2) *3 - arrowHead.width
 			directionArrow.rotation = lineAngle
+			arrowHead.x = mainArrow.x + mainArrow.width/2
 			--directionArrow.x = ball[currentBall].startX+(ball[currentBall].startX-event.x)
 			--directionArrow.y = ball[currentBall].startY+(ball[currentBall].startY-event.y)
 			--directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
 			--directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		end
 		--print(directionArrow.width)
-		directionArrow:setFillColor(0,255,0)
-		directionArrow.alpha = 0.6
+		--directionArrow:setFillColor(0,255,0)
+		directionArrow.alpha = 1
 		--directionArrow:setFillColor(255*(directionArrow.width/directionArrow.maxForce),255*(1-directionArrow.width/directionArrow.maxForce),0)
 		ball[currentBall].prevX = ball[currentBall].x
 		ball[currentBall].prevY = ball[currentBall].y
 		char.hand.x = ball[currentBall].x
 		char.hand.y = ball[currentBall].y
-		print(directionArrow.rotation+90)
+		--print(directionArrow.rotation+90)
 		char.hand.rotation = directionArrow.rotation+90
 		ball[currentBall].rotation = char.hand.rotation
 		directionArrow.x = ball[currentBall].startX+(ball[currentBall].startX-ball[currentBall].x)/2
 		directionArrow.y = ball[currentBall].startY+(ball[currentBall].startY-ball[currentBall].y)/2
-	elseif (event.phase == "ended" or event.phase == "cancelled") and ballTouchStarted == true then
+		local forcePercent = ((directionArrow.width/3)/directionArrow.maxForce) *100
+		if forcePercent < 51 then
+			mainArrow:setFillColor(forcePercent/50*255, 255, 0)
+			arrowHead:setFillColor(forcePercent/50*255, 255, 0)
+		else mainArrow:setFillColor(255, 255-((forcePercent-50)/50)*255, 0)
+			arrowHead:setFillColor(255, 255-((forcePercent-50)/50)*255, 0) end
+	elseif (event.phase == "ended" or event.phase == "cancelled") and ballTouchStarted == true and directionArrow.alpha ~= 0 then
 		ball[currentBall].bodyType = "dynamic"
 		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*15, (ball[currentBall].startY-ball[currentBall].y)*15, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
@@ -425,6 +453,18 @@ myAreaTips.alpha = false
 --myAreaTips.strokeWidth = 3
 --myAreaTips:setFillColor( pink )
 --myAreaTips:setStrokeColor(180, 180, 180)
+local poofSequenceData = {
+    name = "poof",
+	start = 1,
+	count = 6,
+	time = 300,  --optional, in milliseconds; if not supplied, the sprite is frame-based
+	loopCount = 1,
+}
+
+local poofSheet = graphics.newImageSheet("graphics/Poof_UntitledSheet_2.png", sheets.getSpriteSheetDataPoof())
+local poofSprite = display.newSprite(poofSheet, poofSequenceData )
+gameObjectsGroup:insert(poofSprite)
+poofSprite:setFrame(6)
 
 function checkForCollsion()
 	if pin1.isDown == false then
@@ -433,6 +473,11 @@ function checkForCollsion()
 			pin1:setFillColor(255,0,0)
 			pin1.isDown = true
 			pinsKnockedDown = pinsKnockedDown +1
+			poofSprite.x = pin1.x
+			poofSprite.y = pin1.y
+			poofSprite:setFrame(1)
+			poofSprite:play()
+			pin1.isVisible = false
 		end
 	end
 	if pin2.isDown == false then
@@ -441,6 +486,11 @@ function checkForCollsion()
 			pin2:setFillColor(255,0,0)
 			pin2.isDown = true
 			pinsKnockedDown = pinsKnockedDown +1
+			poofSprite.x = pin2.x
+			poofSprite.y = pin2.y
+			poofSprite:setFrame(1)
+			poofSprite:play()
+			pin2.isVisible = false
 		end
 	end
 	if pin3.isDown == false then
@@ -449,6 +499,11 @@ function checkForCollsion()
 			pin3:setFillColor(255,0,0)
 			pin3.isDown = true
 			pinsKnockedDown = pinsKnockedDown +1
+			poofSprite.x = pin3.x
+			poofSprite.y = pin3.y
+			poofSprite:setFrame(1)
+			poofSprite:play()
+			pin3.isVisible = false
 		end
 	end
 	if pin1.isDown == true and pin2.isDown == true and pin3.isDown == true then
@@ -536,7 +591,7 @@ local function showTipPopup()
 	    baseUrl=system.DocumentsDirectory,
 	    urlRequest=listener
 	}
-	native.showWebPopup( "tips1.html", options )
+	native.showWebPopup( "html/tips1.html", options )
 end
 
 local function displayBubbleTips(event)

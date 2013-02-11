@@ -16,7 +16,7 @@ settings = {
 			
 			UIAppFonts = 
             {
-                    ""
+                    "wasser.ttf"
             },
             --[[
             -- iOS app URL schemes:
@@ -25,7 +25,7 @@ settings = {
                 {
                     CFBundleURLSchemes =
                     {
-                        "wasser.ttf"
+                        "ScubaBowl"
                     }
                 }
             }
