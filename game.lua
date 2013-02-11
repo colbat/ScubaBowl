@@ -276,43 +276,40 @@ local function displayMainMenu( event )
 		director:changeScene("mainMenu", "fade")
 end
 
-local function gamePause(event)
-	menuGroup = display.newGroup()
-	if event.phase == "ended" then
-		print("game paused")
-		restartButton = display.newImage("graphics/restartButton.png" )
-		restartButton.y = display.contentCenterY
-		restartButton.x = middlex
-		restartButton:addEventListener("touch",restartLink)
-		resumeButton = display.newImage("graphics/continueButton.png" )
-		resumeButton.y = display.contentCenterY
-		resumeButton.x = middlex - 280
-		resumeButton:addEventListener("touch",resumeLink)
-		goToMenu = display.newImage("graphics/menuButton.png" )
-		goToMenu.y = display.contentCenterY
-		goToMenu.x = middlex + 280
-		goToMenu:addEventListener("touch",displayMainMenu)
-		menuGroup:insert(restartButton)
-		menuGroup:insert(resumeButton)
-		menuGroup:insert(goToMenu)
-	end
-end
-
-
 touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
 
-pause = display.newRect(localGroup, originx,originy, 30, 30 )
-pause.strokeWidth = 3
-pause:setFillColor(140, 140, 140)
-pause:setStrokeColor(180, 180, 180)
-pause:addEventListener("touch",gamePause)
+local function pressGamePause(event)
+	if event.phase == "release" then
+		menuGroup = display.newGroup()
+		--if event.phase == "ended" then
+			print("game paused")
+			restartButton = display.newImage("graphics/restartButton.png" )
+			restartButton.y = display.contentCenterY
+			restartButton.x = middlex
+			restartButton:addEventListener("touch",restartLink)
+			resumeButton = display.newImage("graphics/continueButton.png" )
+			resumeButton.y = display.contentCenterY
+			resumeButton.x = middlex - 280
+			resumeButton:addEventListener("touch",resumeLink)
+			goToMenu = display.newImage("graphics/menuButton.png" )
+			goToMenu.y = display.contentCenterY
+			goToMenu.x = middlex + 280
+			goToMenu:addEventListener("touch",displayMainMenu)
+			menuGroup:insert(restartButton)
+			menuGroup:insert(resumeButton)
+			menuGroup:insert(goToMenu)
+		--end
+		return true
+	end
+end
 
-
-
-
-
+local pauseBtn = myWidget.createButton("circle", "| |", pressGamePause)
+pauseBtn.xScale, pauseBtn.yScale  = 0.3, 0.3
+pauseBtn.x = 25
+pauseBtn.y = -10
+localGroup:insert(pauseBtn)
 
 local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
 directionArrow:setFillColor(0,0,0,0)
