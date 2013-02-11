@@ -1,12 +1,17 @@
 module(..., package.seeall)
 
+shooting_ball= audio.loadStream("shooting_ball.wav")
 Sound_seahourse = audio.loadStream("seahourse.wav")
+--audio.fadeOut({ channel=backgroundMusicChannel, time=5000 } )
 
---if options["music"] == 1 then
-	
-	 -- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
-backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )
+--if options["music"] == 1 then	
+
+-- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
+--backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )
+
 --end
+
+
 
 function new()
 updateMem()
@@ -431,6 +436,7 @@ function touchBall(event)
 		local velocity = math.round((math.sqrt((math.abs(vx) / 30)^2+(math.abs(vy) / 30)^2))*10)/10
 		ball[currentBall].released = true
 		
+<<<<<<< HEAD
 		local VelocityText = display.newText("Velocity: "..velocity.." m/s",0,0, "Wasser", 20 )
 		VelocityText.rotation = directionArrow.rotation
 		VelocityText.x = directionArrow.x+75
@@ -443,6 +449,16 @@ function touchBall(event)
 		
 		narrationChannel = audio.play( shooting_ball, { duration=14000, onComplete=NarrationFinished } )
 
+=======
+
+		narrationChannel = audio.play( shooting_ball, { duration=1400, onComplete=NarrationFinished } )
+	
+--		if options["sounds"] == "1" then
+--	
+		
+--	narrationChannel = audio.play( Sound_seahourse, { duration=1400, onComplete=NarrationFinished } )
+--		end
+>>>>>>> Addding the front sound track
 		
 		char:setFrame(1)
 		transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = originx + 156, y = originy + pixelheight - 150})
@@ -525,10 +541,11 @@ function checkForCollsion()
 		if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
 		
 		
-			narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
-			if options["sounds"] == 1 then
-				narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
-			end
+		narrationChannel = audio.play( Sound_seahourse, { duration=400, onComplete=NarrationFinished } )
+	--		if options["sounds"] == "1" then
+			
+	--			narrationChannel = audio.play( Sound_seahourse, { duration=4000 } )
+	--		end
 			
 			print("Pin1 Down")
 			pin1:setFillColor(255,0,0)
@@ -544,9 +561,9 @@ function checkForCollsion()
 	if pin2.isDown == false then
 		if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
 		
-		narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
-		if options["sounds"] == 1 then
-			narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+		narrationChannel = audio.play( Sound_seahourse, { duration=400, onComplete=NarrationFinished } )
+		if options["sounds"] == "1" then
+			narrationChannel = audio.play( Sound_seahourse, { duration=4000 } )
 		end
 		
 			print("Pin2 Down")
@@ -562,10 +579,9 @@ function checkForCollsion()
 	end
 	if pin3.isDown == false then
 		if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
-		
-		narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
-		if options["sounds"] == 1 then
-			narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+	narrationChannel = audio.play( Sound_seahourse, { duration=400, onComplete=NarrationFinished } )
+		if options["sounds"] == "1" then
+			narrationChannel = audio.play(Sound_seahourse, { duration=14000} )
 		end
 		
 			print("Pin3 Down")

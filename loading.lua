@@ -47,9 +47,9 @@ _G.myWidget = require "myWidget"
 --Sounds-----
 -----------------
 
-_G.backgroundMusic = audio.loadStream("backgroundold.wav")
-_G.shooting_ball = audio.loadStream("shooting_ball.wav")
-_G.Start_Music = audio.loadStream("Sound_start.wav")
+
+backgroundMusic = audio.loadStream("backgroundold.wav")
+backgroundMusicChannel = audio.play(backgroundMusic, { loops=-1, fadein=500 }  )
 
 local loadMainMenu = function()
 	director:changeScene ("mainMenu", "crossfade")
