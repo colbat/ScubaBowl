@@ -260,43 +260,61 @@ local function deleteListeners()
 end
 
 local function restartLink( event )
-	print("restart link")
-	deleteListeners()
-	director:changeScene("game", "fade")
+	if event.phase == "release" then
+		print("restart link")
+		deleteListeners()
+		director:changeScene("game", "fade")
+	end
 end
 
 local function resumeLink( event )
+	if event.phase == "release" then
 		print("resume link")
 		gameResume()
+	end
 end
 
 local function displayMainMenu( event )
+	if event.phase == "release" then
 		deleteListeners()
 		print("menu link")
 		director:changeScene("mainMenu", "fade")
+	end
 end
 
 touchScreen = display.newRect(localGroup, originx, originy, pixelwidth, pixelheight)
 touchScreen.alpha = 0
 touchScreen.isHitTestable = true
 
+
+
+
+
 local function pressGamePause(event)
 	if event.phase == "release" then
 		menuGroup = display.newGroup()
 		--if event.phase == "ended" then
 			print("game paused")
-			restartButton = display.newImage("graphics/restartButton.png" )
-			restartButton.y = display.contentCenterY
-			restartButton.x = middlex
-			restartButton:addEventListener("touch",restartLink)
-			resumeButton = display.newImage("graphics/continueButton.png" )
-			resumeButton.y = display.contentCenterY
-			resumeButton.x = middlex - 280
-			resumeButton:addEventListener("touch",resumeLink)
-			goToMenu = display.newImage("graphics/menuButton.png" )
-			goToMenu.y = display.contentCenterY
-			goToMenu.x = middlex + 280
-			goToMenu:addEventListener("touch",displayMainMenu)
+
+			restartButton = myWidget.createButton("circle", "RESTART", restartLink)
+			restartButton.xScale, restartButton.yScale  = 1, 1
+			restartButton.x = originx + middlex
+			restartButton.y = originy + display.contentCenterY
+			localGroup:insert(restartButton)
+
+			resumeButton = myWidget.createButton("circle", "CONTINUE", resumeLink)
+			resumeButton.xScale, resumeButton.yScale  = 1, 1
+			resumeButton.x = originx + middlex - 280
+			resumeButton.y = originy + display.contentCenterY
+			localGroup:insert(resumeButton)
+
+			goToMenu = myWidget.createButton("circle", "MAIN MENU", displayMainMenu)
+			goToMenu.xScale, goToMenu.yScale  = 1, 1
+			goToMenu.x = originx + middlex + 280
+			goToMenu.y = originy + display.contentCenterY
+			localGroup:insert(goToMenu)
+
+
 			menuGroup:insert(restartButton)
 			menuGroup:insert(resumeButton)
 			menuGroup:insert(goToMenu)
@@ -305,10 +323,10 @@ local function pressGamePause(event)
 	end
 end
 
-local pauseBtn = myWidget.createButton("circle", "| |", pressGamePause)
-pauseBtn.xScale, pauseBtn.yScale  = 0.3, 0.3
-pauseBtn.x = 25
-pauseBtn.y = -10
+local pauseBtn = myWidget.createButton("circle", "||", pressGamePause)
+pauseBtn.xScale, pauseBtn.yScale  = 0.5, 0.5
+pauseBtn.x = originx + 35
+pauseBtn.y = originy + 35
 localGroup:insert(pauseBtn)
 
 local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
