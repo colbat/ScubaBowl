@@ -418,13 +418,26 @@ function touchBall(event)
 		ball[currentBall].bodyType = "dynamic"
 		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*15, (ball[currentBall].startY-ball[currentBall].y)*15, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
+		
+		
 		touchScreen:removeEventListener("touch", touchBall)
 		--print("Velocity: "..ball[currentBall]:getLinearVelocity() / 30 .." m/s")
 		local vx, vy = ball[currentBall]:getLinearVelocity()
 		print("X Velocity: "..math.abs(vx) / 30 .." m/s")
 		print("Y Velocity: "..math.abs(vy) / 30 .." m/s")
+		local velocity = math.round((math.sqrt((math.abs(vx) / 30)^2+(math.abs(vy) / 30)^2))*10)/10
 		ball[currentBall].released = true
-	
+		
+		local VelocityText = display.newText("Velocity: "..velocity.." m/s",0,0, "Wasser", 20 )
+		VelocityText.rotation = directionArrow.rotation
+		VelocityText.x = directionArrow.x+75
+		VelocityText.y = directionArrow.y-75
+		VelocityText:setTextColor(255,255,0)
+		localGroup:insert(VelocityText)
+		
+		transitionStash.VelocityIn = transition.from(VelocityText, {time = 750, alpha = 0})
+		transitionStash.VelocityOut = transition.to(VelocityText, {time = 750, alpha = 0, delay = 4000})
+		
 		if options["sounds"] == 1 then
 			narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
 		end
@@ -439,22 +452,19 @@ end
 
 
 local pin1 = display.newImage( gameObjectsSheet, 3, true)
-pin1.x = 502
-pin1.y = 510
+
 pin1.isDown = false
 --physics.addBody(pin1, "dynamic", physicsData:get("seahorse"))
 pin1.myName = "pin1"
 --pin1:setFillColor(0,255,0)
 local pin2 = display.newImage( gameObjectsSheet, 3, true)
-pin2.x = 967
-pin2.y = 600
+
 pin2.isDown = false
 --pin2:setFillColor(0,255,0)
 --physics.addBody(pin2, "dynamic", physicsData:get("seahorse"))
 pin2.myName = "pin2"
 local pin3 = display.newImage( gameObjectsSheet, 3, true)
-pin3.x = 668
-pin3.y = 450
+
 pin3.isDown = false
 --pin3:setFillColor(0,255,0)
 --physics.addBody(pin3, "dynamic", physicsData:get("seahorse"))
@@ -462,7 +472,28 @@ pin3.myName = "pin3"
 gameObjectsGroup:insert(pin1)
 gameObjectsGroup:insert(pin2)
 gameObjectsGroup:insert(pin3)
-
+if level == 1 then
+	pin1.x = 502
+	pin1.y = 510
+	pin2.x = 870
+	pin2.y = 600
+	pin3.x = 668
+	pin3.y = 450
+elseif level == 2 then
+	pin1.x = 634
+	pin1.y = 434
+	pin2.x = 400
+	pin2.y = 554
+	pin3.x = 573
+	pin3.y = 532
+elseif level == 3 then
+	pin1.x = 400
+	pin1.y = 234
+	pin2.x = 323
+	pin2.y = 309
+	pin3.x = 525
+	pin3.y = 500
+end
 
 local myAreaTipsWidth = pixelwidth / 2
 local myAreaTipsHeight = pixelheight / 2
@@ -676,7 +707,7 @@ function gameOver()
 	for i = 1, 3 do
 		gameOverStars[i] = display.newImage( gameOverGroup, "graphics/star-1.png", 0, 0, true)
 		if howManyStars < i then
-			gameOverStars[i].alpha = 0.5
+			gameOverStars[i].alpha = 0.3
 		end
 		gameOverStars[i].y = 190
 		gameOverStars[i].x = 310 + (i-1)*170
