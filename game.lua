@@ -19,6 +19,9 @@ local restartButton
 local resumeButton
 local goToMenu
 
+local tipsLvl
+local fileTip
+local linkString
 local list
 
 local physicsData = (require "Physics").physicsData(1)
@@ -329,9 +332,16 @@ pauseBtn.x = originx + 35
 pauseBtn.y = originy + 35
 localGroup:insert(pauseBtn)
 
-local directionArrow = display.newRoundedRect( localGroup, 0, 0, 50, 10, 5 )
-directionArrow:setFillColor(0,0,0,0)
+local directionArrow = display.newGroup()
+localGroup:insert(directionArrow)
+local mainArrow = display.newImage(directionArrow, "graphics/arrowPlus.png", 0, 0, true)
+
+local arrowHead = display.newImage(directionArrow, "graphics/arrow.png", 0, 0, true)
+arrowHead.x = mainArrow.x + mainArrow.contentWidth/2+ arrowHead.contentWidth/2
+
+directionArrow.alpha = 0
 directionArrow.maxForce = 140
+directionArrow:setReferencePoint(display.CenterReferencePoint)
 for i = 1, numOfBalls do
 	localGroup:insert(ball[i])
 end
@@ -340,7 +350,7 @@ function touchBall(event)
 	if ball[currentBall].ready == true then
 	if event.phase == "began" and event.x >= ball[currentBall].x -100 and event.x <= ball[currentBall].x +100 and event.y >= ball[currentBall].y -100 and event.y <= ball[currentBall].y +100 then
 		
-		directionArrow:setFillColor(0,255,0,255)
+		--directionArrow:setFillColor(0,255,0,255)
 		directionArrow.x = ball[currentBall].startX
 		directionArrow.y = ball[currentBall].startY
 		directionArrow.alpha = 0
@@ -351,10 +361,18 @@ function touchBall(event)
 		ball[currentBall].y = event.y
 		local xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 		local lineAngle = math.deg( math.atan( yDist/xDist ) )
-		if ( event.x < ball[currentBall].startX ) then lineAngle = lineAngle else lineAngle = lineAngle +180 end
+		--print("line angle: ".. lineAngle)
+		if ( event.x > ball[currentBall].startX ) then 
+			lineAngle = lineAngle +180
+		end
+		if lineAngle == 90 or lineAngle == -90 then
+			lineAngle = lineAngle+0.5
+		end
+		--print("line angle 2: ".. lineAngle)
 		if math.sqrt(xDist^2+yDist^2) <= directionArrow.maxForce then
-			directionArrow.width = math.sqrt(xDist^2+yDist^2) *3
+			mainArrow.width = math.sqrt(xDist^2+yDist^2) *3 - arrowHead.width
 			directionArrow.rotation = lineAngle
+			arrowHead.x = mainArrow.x + mainArrow.width/2
 		else
 			local excessDist = directionArrow.maxForce/(math.sqrt(xDist^2+yDist^2))
 			--print(excessDist)
@@ -362,28 +380,41 @@ function touchBall(event)
 			ball[currentBall].y = ball[currentBall].startY - (ball[currentBall].startY-event.y) * excessDist
 			xDist = ball[currentBall].startX-ball[currentBall].x; local yDist = ball[currentBall].startY-ball[currentBall].y
 			lineAngle = math.deg( math.atan( yDist/xDist ) )
-			if ( event.x < ball[currentBall].startX ) then lineAngle = lineAngle else lineAngle = lineAngle +180 end
-			directionArrow.width = math.sqrt(xDist^2+yDist^2) *3
+
+			if ( event.x > ball[currentBall].startX ) then 
+				lineAngle = lineAngle +180
+			end
+			if lineAngle == 90 or lineAngle == -90 then
+				lineAngle = lineAngle+0.5
+			end
+			mainArrow.width = math.sqrt(xDist^2+yDist^2) *3 - arrowHead.width
 			directionArrow.rotation = lineAngle
+			arrowHead.x = mainArrow.x + mainArrow.width/2
 			--directionArrow.x = ball[currentBall].startX+(ball[currentBall].startX-event.x)
 			--directionArrow.y = ball[currentBall].startY+(ball[currentBall].startY-event.y)
 			--directionArrow.x = ball[currentBall].startX - (ball[currentBall].startX-ball[currentBall].x)/2
 			--directionArrow.y = ball[currentBall].startY - (ball[currentBall].startY-ball[currentBall].y)/2
 		end
 		--print(directionArrow.width)
-		directionArrow:setFillColor(0,255,0)
-		directionArrow.alpha = 0.6
+		--directionArrow:setFillColor(0,255,0)
+		directionArrow.alpha = 1
 		--directionArrow:setFillColor(255*(directionArrow.width/directionArrow.maxForce),255*(1-directionArrow.width/directionArrow.maxForce),0)
 		ball[currentBall].prevX = ball[currentBall].x
 		ball[currentBall].prevY = ball[currentBall].y
 		char.hand.x = ball[currentBall].x
 		char.hand.y = ball[currentBall].y
-		print(directionArrow.rotation+90)
+		--print(directionArrow.rotation+90)
 		char.hand.rotation = directionArrow.rotation+90
 		ball[currentBall].rotation = char.hand.rotation
 		directionArrow.x = ball[currentBall].startX+(ball[currentBall].startX-ball[currentBall].x)/2
 		directionArrow.y = ball[currentBall].startY+(ball[currentBall].startY-ball[currentBall].y)/2
-	elseif (event.phase == "ended" or event.phase == "cancelled") and ballTouchStarted == true then
+		local forcePercent = ((directionArrow.width/3)/directionArrow.maxForce) *100
+		if forcePercent < 51 then
+			mainArrow:setFillColor(forcePercent/50*255, 255, 0)
+			arrowHead:setFillColor(forcePercent/50*255, 255, 0)
+		else mainArrow:setFillColor(255, 255-((forcePercent-50)/50)*255, 0)
+			arrowHead:setFillColor(255, 255-((forcePercent-50)/50)*255, 0) end
+	elseif (event.phase == "ended" or event.phase == "cancelled") and ballTouchStarted == true and directionArrow.alpha ~= 0 then
 		ball[currentBall].bodyType = "dynamic"
 		ball[currentBall]:applyLinearImpulse( (ball[currentBall].startX-ball[currentBall].x)*15, (ball[currentBall].startY-ball[currentBall].y)*15, ball[currentBall].x, ball[currentBall].y )
 		directionArrow.alpha = 0
@@ -443,6 +474,18 @@ myAreaTips.alpha = false
 --myAreaTips.strokeWidth = 3
 --myAreaTips:setFillColor( pink )
 --myAreaTips:setStrokeColor(180, 180, 180)
+local poofSequenceData = {
+    name = "poof",
+	start = 1,
+	count = 6,
+	time = 300,  --optional, in milliseconds; if not supplied, the sprite is frame-based
+	loopCount = 1,
+}
+
+local poofSheet = graphics.newImageSheet("graphics/Poof_UntitledSheet_2.png", sheets.getSpriteSheetDataPoof())
+local poofSprite = display.newSprite(poofSheet, poofSequenceData )
+gameObjectsGroup:insert(poofSprite)
+poofSprite:setFrame(6)
 
 function checkForCollsion()
 	if pin1.isDown == false then
@@ -451,6 +494,11 @@ function checkForCollsion()
 			pin1:setFillColor(255,0,0)
 			pin1.isDown = true
 			pinsKnockedDown = pinsKnockedDown +1
+			poofSprite.x = pin1.x
+			poofSprite.y = pin1.y
+			poofSprite:setFrame(1)
+			poofSprite:play()
+			pin1.isVisible = false
 		end
 	end
 	if pin2.isDown == false then
@@ -459,6 +507,11 @@ function checkForCollsion()
 			pin2:setFillColor(255,0,0)
 			pin2.isDown = true
 			pinsKnockedDown = pinsKnockedDown +1
+			poofSprite.x = pin2.x
+			poofSprite.y = pin2.y
+			poofSprite:setFrame(1)
+			poofSprite:play()
+			pin2.isVisible = false
 		end
 	end
 	if pin3.isDown == false then
@@ -467,6 +520,11 @@ function checkForCollsion()
 			pin3:setFillColor(255,0,0)
 			pin3.isDown = true
 			pinsKnockedDown = pinsKnockedDown +1
+			poofSprite.x = pin3.x
+			poofSprite.y = pin3.y
+			poofSprite:setFrame(1)
+			poofSprite:play()
+			pin3.isVisible = false
 		end
 	end
 	if pin1.isDown == true and pin2.isDown == true and pin3.isDown == true then
@@ -521,22 +579,6 @@ function checkBall(event)
 end
 end
 
-local function onRowRender( tip )
-        local row = event.target
-        local rowGroup = event.view
-        local tipTexte = tip.text
-
-        local text = display.newText(tipTexte, 0, 0, native.systemFont, 18)
-        text:setReferencePoint( display.CenterLeftReferencePoint )
-        text.y = row.height * 0.5
-        if not row.isCategory then
-                text.x = 15
-                text:setTextColor( 0 )
-        end
-
-        -- must insert everything into event.view:
-        rowGroup:insert( text )
-end
 
 local function deleteBubbleTips()
 	display.remove(myTips)
@@ -550,26 +592,48 @@ local function showTipPopup()
 	animation = nil
 	local options =
 	{
-	    hasBackground=false,
+	    hasBackground=true,
 	    baseUrl=system.DocumentsDirectory,
 	    urlRequest=listener
 	}
-	native.showWebPopup( "tips1.html", options )
+	native.showWebPopup( fileTip, options )
 end
+
 
 local function displayBubbleTips(event)
 	if ball[currentBall] and ball[currentBall].y and ball[currentBall].x then
 		if myTips == nil and ball[currentBall].y < myAreaTipsHeight and ball[currentBall].x < myAreaTipsWidth then
 
-			bulleImg = display.newImage( "graphics/bullesbleue.png" )
-			bulleImg.alpha = 0.2
+			bulleImg = display.newImage( "graphics/bigbubble.png" )
+			bulleImg.alpha = 0.5
 			bulleImg.x = originx + 200
 			bulleImg.y = originy + 200
-			
-			myTips = display.newText("Viscosity causes the path to be asymmetric.",bulleImg.x - 30, bulleImg.y, native.systemFont, 18)
-			link = display.newText("Learn more",bulleImg.x , bulleImg.y + 50, native.systemFont, 18)
-			myTips:setTextColor( gray )
-			link:setTextColor( gray )
+
+			linkString = "[Learn more]"
+			if(_G.level == 1) then
+				fileTip = "html/tips1.html"
+				--tipsLvl = "Viscosity causes the path to be asymmetric."
+				myTips = myWidget.createMultLines({"Viscosity causes the path", " to be asymmetric."}, 28,{})
+				myTips.x = 100
+				myTips.y = 200
+			elseif(_G.level == 2) then
+				fileTip = "html/tips2.html"
+				--tipsLvl = "Due to upthrust the ball feels lighter in water."
+				myTips = myWidget.createMultLines({"Due to upthrust the ball", " feels lighter in water."}, 28,{})
+				myTips.x = 100
+				myTips.y = 200
+			elseif(_G.level == 3) then
+				fileTip = "html/tips3.html"
+				--tipsLvl = "Viscosity causes the path to be asymmetric."
+				myTips = myWidget.createMultLines({"Viscosity causes the path", " to be asymmetric."}, 28,{})
+				myTips.x = 100
+				myTips.y = 200
+			end
+
+			--myTips = display.newText(tipsLvl,bulleImg.x - 200, bulleImg.y, "Wasser", 18)
+			link = display.newText(linkString,bulleImg.x , bulleImg.y + 50, "Wasser", 18)
+			--myTips:setTextColor( gray )
+			--link:setTextColor( gray )
 
 			animation = display.newGroup()
 			animation.x, animation.y = 100, 100
