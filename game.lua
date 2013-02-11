@@ -436,7 +436,6 @@ function touchBall(event)
 		local velocity = math.round((math.sqrt((math.abs(vx) / 30)^2+(math.abs(vy) / 30)^2))*10)/10
 		ball[currentBall].released = true
 		
-<<<<<<< HEAD
 		local VelocityText = display.newText("Velocity: "..velocity.." m/s",0,0, "Wasser", 20 )
 		VelocityText.rotation = directionArrow.rotation
 		VelocityText.x = directionArrow.x+75
@@ -449,16 +448,15 @@ function touchBall(event)
 		
 		narrationChannel = audio.play( shooting_ball, { duration=14000, onComplete=NarrationFinished } )
 
-=======
 
-		narrationChannel = audio.play( shooting_ball, { duration=1400, onComplete=NarrationFinished } )
+--		narrationChannel = audio.play( shooting_ball, { duration=1400, onComplete=NarrationFinished } )
 	
 --		if options["sounds"] == "1" then
 --	
 		
 --	narrationChannel = audio.play( Sound_seahourse, { duration=1400, onComplete=NarrationFinished } )
 --		end
->>>>>>> Addding the front sound track
+
 		
 		char:setFrame(1)
 		transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = originx + 156, y = originy + pixelheight - 150})
