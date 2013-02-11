@@ -31,6 +31,8 @@ local tipsLvl
 local fileTip
 local linkString
 local list
+local gameIsOver = false
+local paused = false
 
 local physicsData = (require "Physics").physicsData(1)
 local checkBall
@@ -260,6 +262,7 @@ physics.addBody(leftWall, "static", {bounce = 0.05, friction = 1})
 
 local function gameResume()
 	menuGroup:removeSelf()
+	paused = false
 end
 
 local function deleteListeners()
@@ -302,7 +305,8 @@ touchScreen.isHitTestable = true
 
 
 local function pressGamePause(event)
-	if event.phase == "release" then
+	if event.phase == "release" and paused == false and gameIsOver == false then
+		paused = true
 		menuGroup = display.newGroup()
 		--if event.phase == "ended" then
 			print("game paused")
@@ -358,7 +362,7 @@ end
 local ballTouchStarted = false
 function touchBall(event)
 	if ball[currentBall].ready == true then
-	if event.phase == "began" and event.x >= ball[currentBall].x -100 and event.x <= ball[currentBall].x +100 and event.y >= ball[currentBall].y -100 and event.y <= ball[currentBall].y +100 then
+	if event.phase == "began" and event.x >= ball[currentBall].x -200 and event.x <= ball[currentBall].x +200 and event.y >= ball[currentBall].y -200 and event.y <= ball[currentBall].y +200 then
 		
 		--directionArrow:setFillColor(0,255,0,255)
 		directionArrow.x = ball[currentBall].startX
@@ -513,8 +517,8 @@ elseif level == 3 then
 	pin3.y = 500
 end
 
-local myAreaTipsWidth = pixelwidth / 2
-local myAreaTipsHeight = pixelheight / 2
+local myAreaTipsWidth = pixelwidth / 3
+local myAreaTipsHeight = pixelheight / 3
 local bulleImg
 local myTips
 local animation
@@ -556,6 +560,18 @@ function checkForCollsion()
 			poofSprite:setFrame(1)
 			poofSprite:play()
 			pin1.isVisible = false
+			local scoreAddText = display.newText("10000", 0, 0, "Wasser", 24)
+			scoreAddText:setTextColor(255, 255, 0)
+			scoreAddText.x = pin1.x
+			scoreAddText.y = pin1.y
+			gameObjectsGroup:insert(scoreAddText)
+			gameObjectsGroup:insert(poofSprite)
+			local function scoreAddTextEnd(event)
+				display.remove(scoreAddText)
+			end
+			transition.to( scoreAddText, {time=1000, y = scoreAddText.y-100, onComplete = scoreAddTextEnd})
+			transition.to( scoreAddText, {time=250, alpha = 0, delay = 750})
+			
 		end
 	end
 	if pin2.isDown == false then
@@ -575,6 +591,17 @@ function checkForCollsion()
 			poofSprite:setFrame(1)
 			poofSprite:play()
 			pin2.isVisible = false
+			local scoreAddText = display.newText("10000", 0, 0, "Wasser", 24)
+			scoreAddText:setTextColor(255, 255, 0)
+			scoreAddText.x = pin2.x
+			scoreAddText.y = pin2.y
+			gameObjectsGroup:insert(scoreAddText)
+			gameObjectsGroup:insert(poofSprite)
+			local function scoreAddTextEnd(event)
+				display.remove(scoreAddText)
+			end
+			transition.to( scoreAddText, {time=1000, y = scoreAddText.y-100, onComplete = scoreAddTextEnd})
+			transition.to( scoreAddText, {time=250, alpha = 0, delay = 750})
 		end
 	end
 	if pin3.isDown == false then
@@ -593,6 +620,17 @@ function checkForCollsion()
 			poofSprite:setFrame(1)
 			poofSprite:play()
 			pin3.isVisible = false
+			local scoreAddText = display.newText("10000", 0, 0, "Wasser", 24)
+			scoreAddText:setTextColor(255, 255, 0)
+			scoreAddText.x = pin3.x
+			scoreAddText.y = pin3.y
+			gameObjectsGroup:insert(scoreAddText)
+			gameObjectsGroup:insert(poofSprite)
+			local function scoreAddTextEnd(event)
+				display.remove(scoreAddText)
+			end
+			transition.to( scoreAddText, {time=1000, y = scoreAddText.y-100, onComplete = scoreAddTextEnd})
+			transition.to( scoreAddText, {time=250, alpha = 0, delay = 750})
 		end
 	end
 	if pin1.isDown == true and pin2.isDown == true and pin3.isDown == true then
@@ -655,6 +693,7 @@ local function deleteBubbleTips()
 	bulleImg = nil
 end
 
+local fileTip
 local function showTipPopup()
 	display.remove(animation)
 	animation = nil
@@ -664,7 +703,7 @@ local function showTipPopup()
 	    baseUrl=system.DocumentsDirectory,
 	    urlRequest=listener
 	}
-	native.showWebPopup( fileTip, options )
+	--native.showWebPopup(middlex, middley, , height, "url"[, options])( fileTip, options )
 end
 
 
@@ -675,31 +714,31 @@ local function displayBubbleTips(event)
 			bulleImg = display.newImage( "graphics/bigbubble.png" )
 			bulleImg.alpha = 0.5
 			bulleImg.x = originx + 200
-			bulleImg.y = originy + 200
+			bulleImg.y = originy + 100
 
 			linkString = "[Learn more]"
-			if(_G.level == 1) then
+			if(level == 1) then
 				fileTip = "html/tips1.html"
 				--tipsLvl = "Viscosity causes the path to be asymmetric."
 				myTips = myWidget.createMultLines({"Viscosity causes the path", " to be asymmetric."}, 28,{})
-				myTips.x = 100
-				myTips.y = 200
-			elseif(_G.level == 2) then
+				myTips.x = bulleImg.x
+				myTips.y = bulleImg.y
+			elseif(level == 2) then
 				fileTip = "html/tips2.html"
 				--tipsLvl = "Due to upthrust the ball feels lighter in water."
 				myTips = myWidget.createMultLines({"Due to upthrust the ball", " feels lighter in water."}, 28,{})
-				myTips.x = 100
-				myTips.y = 200
-			elseif(_G.level == 3) then
+				myTips.x = bulleImg.x
+				myTips.y = bulleImg.y
+			elseif(level == 3) then
 				fileTip = "html/tips3.html"
 				--tipsLvl = "Viscosity causes the path to be asymmetric."
 				myTips = myWidget.createMultLines({"Viscosity causes the path", " to be asymmetric."}, 28,{})
-				myTips.x = 100
-				myTips.y = 200
+				myTips.x = bulleImg.x
+				myTips.y = bulleImg.y
 			end
 
 			--myTips = display.newText(tipsLvl,bulleImg.x - 200, bulleImg.y, "Wasser", 18)
-			link = display.newText(linkString,bulleImg.x , bulleImg.y + 50, "Wasser", 18)
+			link = display.newText(linkString, bulleImg.x , bulleImg.y + 75, "Wasser", 18)
 			--myTips:setTextColor( gray )
 			--link:setTextColor( gray )
 
@@ -721,7 +760,25 @@ Runtime:addEventListener( "enterFrame", displayBubbleTips )
 
 function gameOver()
 	--physics.stop()
+	for i = 1, numOfBalls do
+		if ball[i] and ball[i].released == false then
+			local scoreAddText = display.newText("7500", 0, 0, "Wasser", 24)
+			scoreAddText:setTextColor(255, 255, 0)
+			scoreAddText.x = ball[i].x
+			scoreAddText.y = ball[i].y
+			gameObjectsGroup:insert(scoreAddText)
+			local function scoreAddTextEnd(event)
+				display.remove(scoreAddText)
+			end
+			transition.to( scoreAddText, {time=1000, y = scoreAddText.y-100, onComplete = scoreAddTextEnd})
+			transition.to( scoreAddText, {time=250, alpha = 0, delay = 750})
+		end
+	end
+		
+	
+	
 	local gameOverGroup = display.newGroup()
+	gameIsOver = true
 	localGroup:insert(gameOverGroup)
 	print("GAME OVER")
 	--Runtime:removeEventListener("enterFrame", checkBall)
