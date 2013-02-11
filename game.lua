@@ -19,6 +19,9 @@ local restartButton
 local resumeButton
 local goToMenu
 
+local tipsLvl
+local fileTip
+local linkString
 local list
 
 local physicsData = (require "Physics").physicsData(1)
@@ -558,22 +561,6 @@ function checkBall(event)
 end
 end
 
-local function onRowRender( tip )
-        local row = event.target
-        local rowGroup = event.view
-        local tipTexte = tip.text
-
-        local text = display.newText(tipTexte, 0, 0, native.systemFont, 18)
-        text:setReferencePoint( display.CenterLeftReferencePoint )
-        text.y = row.height * 0.5
-        if not row.isCategory then
-                text.x = 15
-                text:setTextColor( 0 )
-        end
-
-        -- must insert everything into event.view:
-        rowGroup:insert( text )
-end
 
 local function deleteBubbleTips()
 	display.remove(myTips)
@@ -591,22 +578,44 @@ local function showTipPopup()
 	    baseUrl=system.DocumentsDirectory,
 	    urlRequest=listener
 	}
-	native.showWebPopup( "html/tips1.html", options )
+	native.showWebPopup( fileTip, options )
 end
+
 
 local function displayBubbleTips(event)
 	if ball[currentBall] and ball[currentBall].y and ball[currentBall].x then
 		if myTips == nil and ball[currentBall].y < myAreaTipsHeight and ball[currentBall].x < myAreaTipsWidth then
 
-			bulleImg = display.newImage( "graphics/bullesbleue.png" )
-			bulleImg.alpha = 0.2
+			bulleImg = display.newImage( "graphics/bigbubble.png" )
+			bulleImg.alpha = 0.5
 			bulleImg.x = originx + 200
 			bulleImg.y = originy + 200
-			
-			myTips = display.newText("Viscosity causes the path to be asymmetric.",bulleImg.x - 30, bulleImg.y, native.systemFont, 18)
-			link = display.newText("Learn more",bulleImg.x , bulleImg.y + 50, native.systemFont, 18)
-			myTips:setTextColor( gray )
-			link:setTextColor( gray )
+
+			linkString = "[Learn more]"
+			if(_G.level == 1) then
+				fileTip = "html/tips1.html"
+				--tipsLvl = "Viscosity causes the path to be asymmetric."
+				myTips = myWidget.createMultLines({"Viscosity causes the path", " to be asymmetric."}, 28,{})
+				myTips.x = 100
+				myTips.y = 200
+			elseif(_G.level == 2) then
+				fileTip = "html/tips2.html"
+				--tipsLvl = "Due to upthrust the ball feels lighter in water."
+				myTips = myWidget.createMultLines({"Due to upthrust the ball", " feels lighter in water."}, 28,{})
+				myTips.x = 100
+				myTips.y = 200
+			elseif(_G.level == 3) then
+				fileTip = "html/tips3.html"
+				--tipsLvl = "Viscosity causes the path to be asymmetric."
+				myTips = myWidget.createMultLines({"Viscosity causes the path", " to be asymmetric."}, 28,{})
+				myTips.x = 100
+				myTips.y = 200
+			end
+
+			--myTips = display.newText(tipsLvl,bulleImg.x - 200, bulleImg.y, "Wasser", 18)
+			link = display.newText(linkString,bulleImg.x , bulleImg.y + 50, "Wasser", 18)
+			--myTips:setTextColor( gray )
+			--link:setTextColor( gray )
 
 			animation = display.newGroup()
 			animation.x, animation.y = 100, 100
