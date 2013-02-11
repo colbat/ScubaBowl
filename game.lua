@@ -1,9 +1,12 @@
 module(..., package.seeall)
 
-if options["music"] == 1 then
+Sound_seahourse = audio.loadStream("seahourse.wav")
+
+--if options["music"] == 1 then
+	
 	 -- play the background music on channel 1, loop infinitely, and fadein over 1 seconds
-	backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )
-end
+backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=1000 }  )
+--end
 
 function new()
 updateMem()
@@ -438,9 +441,8 @@ function touchBall(event)
 		transitionStash.VelocityIn = transition.from(VelocityText, {time = 750, alpha = 0})
 		transitionStash.VelocityOut = transition.to(VelocityText, {time = 750, alpha = 0, delay = 4000})
 		
-		if options["sounds"] == 1 then
-			narrationChannel = audio.play( shooting_ball, { duration=30000, onComplete=NarrationFinished } )
-		end
+		narrationChannel = audio.play( shooting_ball, { duration=14000, onComplete=NarrationFinished } )
+
 		
 		char:setFrame(1)
 		transitionStash.initBallTrans = transition.to(char.hand, {time = 1000, x = originx + 156, y = originy + pixelheight - 150})
@@ -521,6 +523,13 @@ poofSprite:setFrame(6)
 function checkForCollsion()
 	if pin1.isDown == false then
 		if math.abs(ball[currentBall].x - pin1.x) < 30 + pin1.contentWidth/2 and math.abs(ball[currentBall].y - pin1.y) < 30 + pin1.contentHeight/2 then
+		
+		
+			narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+			if options["sounds"] == 1 then
+				narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+			end
+			
 			print("Pin1 Down")
 			pin1:setFillColor(255,0,0)
 			pin1.isDown = true
@@ -534,6 +543,12 @@ function checkForCollsion()
 	end
 	if pin2.isDown == false then
 		if math.abs(ball[currentBall].x - pin2.x) < 30 + pin2.contentWidth/2 and math.abs(ball[currentBall].y - pin2.y) < 30 + pin2.contentHeight/2 then
+		
+		narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+		if options["sounds"] == 1 then
+			narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+		end
+		
 			print("Pin2 Down")
 			pin2:setFillColor(255,0,0)
 			pin2.isDown = true
@@ -547,6 +562,12 @@ function checkForCollsion()
 	end
 	if pin3.isDown == false then
 		if math.abs(ball[currentBall].x - pin3.x) < 30 + pin3.contentWidth/2 and math.abs(ball[currentBall].y - pin3.y) < 30 + pin3.contentHeight/2 then
+		
+		narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+		if options["sounds"] == 1 then
+			narrationChannel = audio.play( Sound_seahourse, { duration=14000, onComplete=NarrationFinished } )
+		end
+		
 			print("Pin3 Down")
 			pin3:setFillColor(255,0,0)
 			pin3.isDown = true
